@@ -1,0 +1,59 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_9/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_8/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_7/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_6/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_5/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_4/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_3/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_2/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_14/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_12/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_11/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_10/include/**",
+        "/home/clark/denso_ros2_ws/install/ros2_control_demo_example_1/include/**",
+        "/home/clark/denso_ros2_ws/install/gazebo_ros2_control/include/**",
+        "/home/clark/denso_ros2_ws/install/denso_robot_control/include/**",
+        "/home/clark/denso_ros2_ws/install/denso_robot_core/include/**",
+        "/home/clark/denso_ros2_ws/install/denso_robot_core_interfaces/include/**",
+        "/home/clark/denso_ros2_ws/install/bcap_service/include/**",
+        "/home/clark/denso_ros2_ws/install/bcap_service_interfaces/include/**",
+        "/home/clark/denso_ros2_ws/install/bcap_core/include/**",
+        "/home/clark/turtlebot3_ws/install/turtlebot3_fake_node/include/**",
+        "/home/clark/turtlebot3_ws/install/turtlebot3_msgs/include/**",
+        "/home/clark/turtlebot3_ws/install/turtlebot3_gazebo/include/**",
+        "/home/clark/turtlebot3_ws/install/dynamixel_sdk_custom_interfaces/include/**",
+        "/home/clark/turtlebot3_ws/install/dynamixel_sdk/include/**",
+        "/home/clark/trc_ws/install/robot_collective_interfaces/include/**",
+        "/home/clark/trc_ws/install/trc_interfaces/include/**",
+        "/home/clark/trc_ws/install/isaac_ros_stereo_image_proc/include/**",
+        "/home/clark/trc_ws/install/isaac_ros_nvengine/include/**",
+        "/home/clark/trc_ws/install/isaac_ros_nvengine_interfaces/include/**",
+        "/home/clark/trc_ws/install/isaac_ros_apriltag/include/**",
+        "/home/clark/trc_ws/install/isaac_ros_image_proc/include/**",
+        "/home/clark/trc_ws/install/isaac_ros_common/include/**",
+        "/home/clark/trc_ws/install/isaac_ros_apriltag_interfaces/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/clark/denso_ros2_ws/src/denso_robot_drivers_ros2/bcap_core/include/**",
+        "/home/clark/denso_ros2_ws/src/denso_robot_drivers_ros2/bcap_service/include/**",
+        "/home/clark/denso_ros2_ws/src/denso_robot_drivers_ros2/denso_robot_control/include/**",
+        "/home/clark/denso_ros2_ws/src/denso_robot_drivers_ros2/denso_robot_core/include/**",
+        "/home/clark/denso_ros2_ws/src/gazebo_ros2_control/gazebo_ros2_control/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

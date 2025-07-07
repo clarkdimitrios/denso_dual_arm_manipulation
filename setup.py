@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'go_to_pose_node = manip_facts_lab.go_to_pose:main',
+            'add_virtual_walls = manip_facts_lab.add_virtual_wall:main',
         ],
     },
 )

@@ -3,9 +3,9 @@
 import rclpy
 from rclpy.node import Node
 from pymoveit2 import MoveIt2
-from moveit_msgs.msg import CollisionObject
-from shape_msgs.msg import SolidPrimitive
 from geometry_msgs.msg import Pose
+import transforms3d
+
 
 class WallPublisher(Node):
     def __init__(self):
@@ -23,28 +23,28 @@ class WallPublisher(Node):
         self.get_logger().info("Adding rear wall to planning scene...")
         self.add_rear_wall()
         self.get_logger().info("Wall added.")
-        rclpy.shutdown()
+
+        # Allow time to publish before shutdown
+        self.create_timer(1.0, lambda: rclpy.shutdown())
 
     def add_rear_wall(self):
-        wall = CollisionObject()
-        wall.id = "rear_virtual_wall"
-        wall.header.frame_id = "base_link"
-
-        primitive = SolidPrimitive()
-        primitive.type = SolidPrimitive.BOX
-        primitive.dimensions = [0.01, 1.0, 2.0]  # thickness, width, height
-
         pose = Pose()
-        pose.position.x = -0.355  # flush with x = -0.35
-        pose.position.y = 0.0
-        pose.position.z = 0.25
-        pose.orientation.w = 1.0
+        pose.position.y = 0.455  # centers a 1cm wall at x = 0.35 (y in rviz)
+        pose.position.x = 0.0
+        pose.position.z = 1.0     # center of 2m tall wall
+        
+        
+        q = transforms3d.euler.euler2quat(1.5708, 0.0, 0.0, axes='sxyz')
+        pose.orientation.x = q[0]
+        pose.orientation.y = q[1]
+        pose.orientation.z = q[2]
+        pose.orientation.w = q[3]
 
-        wall.primitives.append(primitive)
-        wall.primitive_poses.append(pose)
-        wall.operation = CollisionObject.ADD
-
-        self.moveit2._planning_scene_interface.apply_collision_object(wall)
+        self.moveit2.add_collision_box(
+            id="rear_virtual_wall",
+            size=[0.01, 2.0, 2.0],  # [depth (x), width (y), height (z)]
+            pose=pose
+        )
 
 def main():
     rclpy.init()

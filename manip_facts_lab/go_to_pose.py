@@ -18,13 +18,34 @@ class GoToPoseNode(Node):
             joint_names=[
                 "joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6"
             ],
-            base_link_name="base_link",  
-            end_effector_name="J6",    
-            group_name="arm",             # Change if I have different names per arm
+            base_link_name="base_link",
+            end_effector_name="J6",
+            group_name="arm",
         )
+
+        # Prompt for velocity/acceleration scaling
+        self.set_motion_scaling_factors()
 
         self.get_logger().info("Ready to input a pick pose")
         self.move_to_user_pose()
+
+    def set_motion_scaling_factors(self):
+        def prompt_float(prompt_text, default):
+            try:
+                value = input(f"{prompt_text} [default {default}]: ").strip()
+                return float(value) if value else default
+            except ValueError:
+                self.get_logger().warn(f"Invalid input, using default: {default}")
+                return default
+
+        velocity = prompt_float("Velocity scaling factor (0.0-1.0)", 0.2)
+        acceleration = prompt_float("Acceleration scaling factor (0.0-1.0)", 0.2)
+
+        velocity = max(0.0, min(1.0, velocity))
+        acceleration = max(0.0, min(1.0, acceleration))
+
+        self.moveit2.max_velocity_scaling_factor = velocity
+        self.moveit2.max_acceleration_scaling_factor = acceleration
 
     def move_to_user_pose(self):
         # Prompt for user input

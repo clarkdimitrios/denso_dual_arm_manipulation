@@ -24,7 +24,33 @@ class GoToPoseNode(Node):
         )
 
         self.get_logger().info("Ready to input a pick pose")
+
+        self.add_virtual_wall()
         self.move_to_user_pose()
+
+    def add_virtual_wall(self):
+        from moveit_msgs.msg import CollisionObject
+        from shape_msgs.msg import SolidPrimitive
+        from geometry_msgs.msg import Pose
+
+        wall = CollisionObject()
+        wall.id = "rear_virtual_wall"
+        wall.header.frame_id = "base_link"
+
+        # Define the wall as a thin vertical box
+        primitive = SolidPrimitive()
+        primitive.type = SolidPrimitive.BOX
+        primitive.dimensions = [0.01, 1.0, 2.0]  # [x=thickness, y=width, z=height]
+
+        pose = Pose()
+        pose.position.x = -0.355  # center is offset by -0.005 for 1cm thickness
+        pose.position.y = 0.0
+        pose.position.z = 0.25    
+        pose.orientation.w = 1.0  
+
+        wall.primitives.append(primitive)
+        wall.primitive_poses.append(pose)
+
 
     def move_to_user_pose(self):
         # Prompt for user input

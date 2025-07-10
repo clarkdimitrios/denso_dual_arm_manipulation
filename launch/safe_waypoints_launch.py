@@ -10,7 +10,7 @@ def generate_launch_description():
         ),
         Node(
             package='manip_facts_lab',
-            executable='go_to_pose_node',
-            name='go_to_pose_node',
+            executable='waypoints_node',
+            name='waypoints_node',
         ),
     ])

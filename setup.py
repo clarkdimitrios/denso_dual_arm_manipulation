@@ -1,3 +1,4 @@
+from glob import glob
 from setuptools import find_packages, setup
 
 package_name = 'manip_facts_lab'
@@ -11,6 +12,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', ['launch/safe_go_to_pose_launch.py']),
+        (f'share/{package_name}/waypoints', glob('waypoints/*.csv')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -23,6 +25,7 @@ setup(
         'console_scripts': [
             'go_to_pose_node = manip_facts_lab.go_to_pose:main',
             'add_virtual_walls = manip_facts_lab.add_virtual_wall:main',
+            'waypoints_node = manip_facts_lab.follow_waypoints:main',
         ],
     },
 )

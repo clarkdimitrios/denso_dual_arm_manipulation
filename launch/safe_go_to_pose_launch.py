@@ -13,4 +13,9 @@ def generate_launch_description():
             executable='add_virtual_walls',
             name='add_virtual_walls',
         ),
+        Node(
+            package='manip_facts_lab',
+            executable='nullspace_optim_node',
+            name='nullspace_optim_node',
+        ),
     ])

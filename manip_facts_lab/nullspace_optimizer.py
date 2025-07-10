@@ -9,7 +9,7 @@ from kdl_parser_py.urdf import treeFromParam
 
 class NullspaceOptimizer(Node):
     def __init__(self):
-        super().__init__('nullspace_optimizer')
+        super().__init__('nullspace_optim_node')
 
         self.moveit2 = MoveIt2(
             node=self,

@@ -79,7 +79,11 @@ class WaypointPlanner(Node):
                     pose = self.pose_from_row(row)
                     self.get_logger().info(f"Moving to waypoint {i + 1}...")
                     self.moveit2.move_to_pose(pose)
-                    self.get_logger().info(f"Arrived at waypoint {i + 1}")
+                    success = self.moveit2.wait_until_executed()
+                    if success:
+                        self.get_logger().info(f"Arrived at waypoint {i + 1}")
+                    else:
+                        self.get_logger().warn(f"Failed to reach waypoint {i + 1}")
         except FileNotFoundError:
             self.get_logger().error(f"CSV file '{filename}' not found.")
 

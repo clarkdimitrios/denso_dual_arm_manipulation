@@ -12,6 +12,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', ['launch/safe_go_to_pose_launch.py']),
+        ('share/' + package_name + '/launch', ['launch/safe_waypoints_launch.py']),
         (f'share/{package_name}/waypoints', glob('waypoints/*.csv')),
     ],
     install_requires=['setuptools'],

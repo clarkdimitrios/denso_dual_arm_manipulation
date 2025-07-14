@@ -36,9 +36,9 @@ class WaypointOptimizer:
                 ik_solutions.append(np.array(q_sol.position))
 
         if ik_solutions:
-            self.get_logger().info(f"Found {len(ik_solutions)} IK solutions out of {self.num_samples} samples.")
+            self.node.get_logger().info(f"Found {len(ik_solutions)} IK solutions out of {self.num_samples} samples.")
         else:
-            self.get_logger().warn(f"No IK solutions found after {self.num_samples} attempts for this waypoint!")
+            self.node.get_logger().warn(f"No IK solutions found after {self.num_samples} attempts for this waypoint!")
 
         return ik_solutions
 

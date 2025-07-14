@@ -71,6 +71,8 @@ class WaypointPlanner(Node):
             with open(filename, newline='') as csvfile:
                 reader = csv.reader(csvfile)
                 for i, row in enumerate(reader):
+                    if len(row) == 3:
+                        row += ['0', '0', '0']
                     if len(row) != 6:
                         self.get_logger().warn(f"Skipping invalid row {i + 1}: {row}")
                         continue

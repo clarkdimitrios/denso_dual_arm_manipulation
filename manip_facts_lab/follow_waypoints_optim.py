@@ -18,7 +18,7 @@ class WaypointOptimizer:
         self.node = node
         self.num_samples = num_samples
 
-    def sample_ik_solutions(self, pose):
+    def sample_ik_solutions(self, pose, i=0):
         ik_solutions = []
         for _ in range(self.num_samples):
             q_init = np.random.uniform(-1, 1, len(self.moveit2.joint_names)).tolist()
@@ -36,15 +36,15 @@ class WaypointOptimizer:
                 ik_solutions.append(np.array(q_sol.position))
 
         if ik_solutions:
-            self.node.get_logger().info(f"Found {len(ik_solutions)} IK solutions out of {self.num_samples} samples.")
+            self.node.get_logger().info(f"Waypoint {i+1}: Found {len(ik_solutions)} IK solutions out of {self.num_samples} samples.")
         else:
-            self.node.get_logger().warn(f"No IK solutions found after {self.num_samples} attempts for this waypoint!")
+            self.node.get_logger().warn(f"Waypoint {i+1}: No IK solutions found after {self.num_samples} attempts for this waypoint!")
 
         return ik_solutions
 
 
     def optimize_sequence(self, waypoints):
-        ik_samples = [self.sample_ik_solutions(p) for p in waypoints]
+        ik_samples = [self.sample_ik_solutions(p, i) for i, p in enumerate(waypoints)]
         if any(len(s) == 0 for s in ik_samples):
             self.node.get_logger().error("One or more waypoints have no IK solutions. Aborting.")
             return []

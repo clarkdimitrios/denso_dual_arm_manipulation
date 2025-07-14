@@ -13,7 +13,7 @@ import os
 
 
 class WaypointOptimizer:
-    def __init__(self, moveit2, node, num_samples=5):
+    def __init__(self, moveit2, node, num_samples=10):
         self.moveit2 = moveit2
         self.node = node
         self.num_samples = num_samples
@@ -24,14 +24,24 @@ class WaypointOptimizer:
             q_init = np.random.uniform(-1, 1, len(self.moveit2.joint_names)).tolist()
             q_sol = self.moveit2.compute_ik(
                 position=pose.position,
-                quat_xyzw=(pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w),
+                quat_xyzw=(
+                    pose.orientation.x,
+                    pose.orientation.y,
+                    pose.orientation.z,
+                    pose.orientation.w
+                ),
                 start_joint_state=q_init,
             )
             if q_sol is not None:
                 ik_solutions.append(np.array(q_sol.position))
-        if not ik_solutions:
-            self.node.get_logger().warn("No IK solutions found for a waypoint.")
+
+        if ik_solutions:
+            self.get_logger().info(f"Found {len(ik_solutions)} IK solutions out of {self.num_samples} samples.")
+        else:
+            self.get_logger().warn(f"No IK solutions found after {self.num_samples} attempts for this waypoint!")
+
         return ik_solutions
+
 
     def optimize_sequence(self, waypoints):
         ik_samples = [self.sample_ik_solutions(p) for p in waypoints]

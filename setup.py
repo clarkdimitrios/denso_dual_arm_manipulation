@@ -13,6 +13,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', ['launch/safe_go_to_pose_launch.py']),
         ('share/' + package_name + '/launch', ['launch/safe_waypoints_launch.py']),
+        ('share/' + package_name + '/launch', ['launch/safe_optim_waypoints_launch.py']),
         (f'share/{package_name}/waypoints', glob('waypoints/*.csv')),
     ],
     install_requires=['setuptools'],
@@ -27,6 +28,7 @@ setup(
             'go_to_pose_node = manip_facts_lab.go_to_pose:main',
             'add_virtual_walls = manip_facts_lab.add_virtual_wall:main',
             'waypoints_node = manip_facts_lab.follow_waypoints:main',
+            'waypoints_optim_node = manip_facts_lab.follow_waypoints_optim:main',
         ],
     },
 )

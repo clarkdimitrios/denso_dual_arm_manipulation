@@ -8,6 +8,8 @@ import math
 import transforms3d
 import csv
 import numpy as np
+from ament_index_python.packages import get_package_share_directory
+import os
 
 
 class WaypointOptimizer:
@@ -67,12 +69,14 @@ class WaypointOptimizerNode(Node):
 
         self.declare_parameter('csv_filename', '')
         csv_filename = self.get_parameter('csv_filename').get_parameter_value().string_value
+        pkg_path = get_package_share_directory('manip_facts_lab')
+        csv_path = os.path.join(pkg_path, 'waypoints', csv_filename)
 
         if not csv_filename:
             self.get_logger().error(
                 "\n\nMissing required parameter 'csv_filename'.\n"
                 "Please run with:\n"
-                "  ros2 run manip_facts_lab waypoint_optim_node --ros-args -p csv_filename:=<filename>\n"
+                "  ros2 run manip_facts_lab waypoints_optim_node --ros-args -p csv_filename:=<filename>\n"
             )
             rclpy.shutdown()
             return
@@ -86,7 +90,7 @@ class WaypointOptimizerNode(Node):
         )
 
         optimizer = WaypointOptimizer(self.moveit2, self)
-        waypoints = self.load_waypoints(csv_filename)
+        waypoints = self.load_waypoints(csv_path)
         if waypoints:
             q_sequence = optimizer.optimize_sequence(waypoints)
             for idx, q in enumerate(q_sequence):

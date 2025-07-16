@@ -15,15 +15,26 @@ class WaypointPlanner(Node):
     def __init__(self):
         super().__init__('waypoints_node')
 
+        self.declare_parameter('namespace', '') #expected: left_, right_
+        ns = self.get_parameter('namespace').get_parameter_value().string_value
+        joint_names = [f"{ns}joint_{i}" for i in range(1,7)]
+
+        if not ns:
+            self.get_logger().warn(
+                "\n\nParameter 'namespace_prefix' is empty — "
+                "using default joint names without prefix.\n"
+                "If you are running with a namespaced robot (e.g., left_ or right_),\n"
+                "make sure to set this parameter with:\n"
+                "  ros2 run manip_facts_lab waypoints_optim_node --ros-args -p namespace:=<prefix>\n"
+            )
+
+
         self.moveit2 = MoveIt2(
             node=self,
-            joint_names=[
-                "joint_1", "joint_2", "joint_3",
-                "joint_4", "joint_5", "joint_6"
-            ],
-            base_link_name="base_link",
-            end_effector_name="J6",
-            group_name="arm"
+            joint_names=joint_names, #["joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6"],
+            base_link_name=f"{ns}base_link", #"base_link",
+            end_effector_name=f"{ns}J6", #"J6",
+            group_name=f"{ns}arm", #"arm"
         )
 
         self.declare_parameter("csv_filename", "")

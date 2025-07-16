@@ -29,6 +29,7 @@ setup(
             'add_virtual_walls = manip_facts_lab.add_virtual_wall:main',
             'waypoints_node = manip_facts_lab.follow_waypoints:main',
             'waypoints_optim_node = manip_facts_lab.follow_waypoints_optim:main',
+            'robust_waypoints_node = manip_facts_lab.robust_waypoints_optim:main',
         ],
     },
 )

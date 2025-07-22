@@ -5,64 +5,81 @@ from rclpy.node import Node
 from pymoveit2 import MoveIt2
 from geometry_msgs.msg import Pose
 import transforms3d
+import yaml
 
 
 class WallPublisher(Node):
     def __init__(self):
         super().__init__("add_virtual_wall")
 
-        self.declare_parameter('namespace', '') #expected: left_, right_
-        ns = self.get_parameter('namespace').get_parameter_value().string_value
-        joint_names = [f"{ns}joint_{i}" for i in range(1,7)]
+        # Declare parameters with correct default types
+        self.declare_parameter('namespace', '')
+        self.declare_parameter('walls', [''])  # Must be a list of strings by default
+
+        ns = self.get_parameter('namespace').value
+        walls_param = self.get_parameter('walls').value  # List[str]
+
+        joint_names = [f"{ns}joint_{i}" for i in range(1, 7)]
 
         if not ns:
-            self.get_logger().warn(
-                "\n\nParameter 'namespace_prefix' is empty — "
-                "using default joint names without prefix.\n"
-                "If you are running with a namespaced robot (e.g., left_ or right_),\n"
-                "make sure to set this parameter with:\n"
-                "  ros2 run manip_facts_lab waypoints_optim_node --ros-args -p namespace:=<prefix>\n"
-            )
-
+            self.get_logger().warn("Parameter 'namespace' is empty — using default joint names without prefix.")
 
         self.moveit2 = MoveIt2(
             node=self,
-            joint_names=joint_names, #["joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6"],
-            base_link_name=f"{ns}base_link", #"base_link",
-            end_effector_name=f"{ns}J6", #"J6",
-            group_name=f"{ns}arm", #"arm"
+            joint_names=joint_names,
+            base_link_name=f"{ns}base_link",
+            end_effector_name=f"{ns}J6",
+            group_name=f"{ns}arm",
         )
 
-        self.get_logger().info(f"Adding rear wall to {ns}arm planning scene...")
-        self.add_rear_wall()
-        self.get_logger().info("Wall added.")
+        valid_walls = [w for w in walls_param if w.strip()]
+        if not valid_walls:
+            self.get_logger().warn("No walls specified — nothing will be added.")
+        else:
+            self.add_walls(valid_walls)
 
-        # Allow time to publish before shutdown
         self.create_timer(1.0, lambda: rclpy.shutdown())
 
-    def add_rear_wall(self):
-        pose = Pose()
-        pose.position.y = 0.455  # centers a 1cm wall at x = 0.35 (y in rviz)
-        pose.position.x = 0.0
-        pose.position.z = 1.0     # center of 2m tall wall
-        
-        
-        q = transforms3d.euler.euler2quat(1.5708, 0.0, 0.0, axes='sxyz')
-        pose.orientation.x = q[0]
-        pose.orientation.y = q[1]
-        pose.orientation.z = q[2]
-        pose.orientation.w = q[3]
+    def add_walls(self, walls_list):
+        for i, wall_string in enumerate(walls_list):
+            wall_dict = self._parse_wall_param(wall_string)
+            if not wall_dict:
+                continue
 
-        self.moveit2.add_collision_box(
-            id="rear_virtual_wall",
-            size=[0.01, 2.0, 2.0],  # [depth (x), width (y), height (z)]
-            pose=pose
-        )
+            pose = Pose()
+            pose.position.x = wall_dict.get('pose', [0, 0, 0, 0, 0, 0])[0]
+            pose.position.y = wall_dict.get('pose', [0, 0, 0, 0, 0, 0])[1]
+            pose.position.z = wall_dict.get('pose', [0, 0, 0, 0, 0, 0])[2]
+
+            roll, pitch, yaw = wall_dict.get('pose', [0, 0, 0, 0, 0, 0])[3:6]
+            q = transforms3d.euler.euler2quat(roll, pitch, yaw, axes='sxyz')
+            pose.orientation.x = q[0]
+            pose.orientation.y = q[1]
+            pose.orientation.z = q[2]
+            pose.orientation.w = q[3]
+
+            size = wall_dict.get('size', [1.0, 1.0, 1.0])
+
+            self.get_logger().info(f"Adding wall '{wall_dict.get('id', f'wall_{i}')}' at {pose.position}")
+            self.moveit2.add_collision_box(
+                id=wall_dict.get('id', f'wall_{i}'),
+                size=size,
+                pose=pose
+            )
+
+    def _parse_wall_param(self, wall_string):
+        try:
+            return yaml.safe_load(wall_string)
+        except Exception as e:
+            self.get_logger().warn(f"Failed to parse wall param: {e}")
+            return None
+
 
 def main():
     rclpy.init()
     node = WallPublisher()
     rclpy.spin(node)
+
 
 if __name__ == "__main__":
     main()

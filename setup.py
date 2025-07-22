@@ -18,6 +18,7 @@ setup(
         ('share/' + package_name + '/launch', ['launch/comb_multi_robot_bringup_launch.py']),
         (f'share/{package_name}/waypoints', glob('waypoints/*.csv')),
         (f'share/{package_name}/urdf', glob('urdf/*.xacro')),
+        (f'share/{package_name}/config', glob('config/*.yaml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

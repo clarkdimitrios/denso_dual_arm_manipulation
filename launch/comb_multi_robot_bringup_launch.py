@@ -34,4 +34,19 @@ def generate_launch_description():
         }.items()
     )
 
-    return LaunchDescription(declared_arguments + [denso_bringup_include])
+    add_virtual_walls_node = Node(
+        package='manip_facts_lab',
+        executable='add_virtual_walls',
+        name='add_virtual_walls',
+        parameters=[os.path.join(
+            get_package_share_directory('manip_facts_lab'),
+            'config',
+            'virtual_walls.yaml'
+        )]
+    )
+
+    return LaunchDescription(declared_arguments + [
+        denso_bringup_include,
+        add_virtual_walls_node
+    ])
+

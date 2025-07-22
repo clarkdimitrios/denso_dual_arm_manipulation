@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="dual_denso_robot" params="
+    model
+    sim:=False"  
+  >
+
+    <xacro:arg name="model" default="vm60b1"/>
+
+    <link name="world"/>
+
+    <!-- Include your single-arm macro -->
+    <xacro:include filename="$(find manip_facts_lab)/urdf/denso_robot_macro.xacro" />
+
+    <!-- Left Arm Instance -->
+    <xacro:denso_robot
+      model="$(arg model)"
+      namespace="left_"
+      ip_address="192.168.17.21"
+      send_format="288"
+      recv_format="292"/>
+
+    <joint name="left_arm_mount" type="fixed">
+      <parent link="world"/>
+      <child link="left_base_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Right Arm Instance -->
+    <xacro:denso_robot
+      model="$(arg model)"
+      namespace="right_"
+      ip_address="192.168.17.20"
+      send_format="288"
+      recv_format="292"/>
+      
+    <joint name="right_arm_mount" type="fixed">
+      <parent link="world"/>
+      <child link="right_base_link"/>
+      <origin xyz="2 0 0" rpy="0 0 0"/>
+    </joint>
+  
+    <gazebo>
+     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <parameters>$(find denso_robot_moveit_config)/robots/$(arg model)/config/dual_denso_robot_controllers.yaml</parameters>
+     </plugin>
+    </gazebo>
+
+  
+  </xacro:macro>
+
+</robot>
+

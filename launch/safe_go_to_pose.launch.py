@@ -1,16 +1,44 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, OpaqueFunction, LogInfo, Shutdown
+from launch.actions import DeclareLaunchArgument, OpaqueFunction, LogInfo, GroupAction
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
-def check_namespace_prefix(context, *args, **kwargs):
-    namespace_prefix = LaunchConfiguration('namespace').perform(context)
+def setup_nodes(context, *args, **kwargs):
+    dual = LaunchConfiguration('dual').perform(context).lower() == 'true'
+    ns = LaunchConfiguration('namespace').perform(context)
     actions = []
-    if not namespace_prefix:
+
+    if dual:
+        actions.append(LogInfo(msg="\n[INFO] Dual arm mode enabled — Launching go_to_pose_node for 'left_' and 'right_'."))
+        for prefix in ['left_', 'right_']:
+            actions.append(
+                Node(
+                    package='manip_facts_lab',
+                    executable='go_to_pose_node',
+                    name=f'{prefix}go_to_pose_node',
+                    parameters=[{'namespace': prefix}]
+                )
+            )
+    else:
+        if not ns:
+            actions += [
+                LogInfo(msg="\n[WARN] 'namespace' is empty — Using default joint names without prefix."),
+                LogInfo(msg="If using multiple arms, you probably want to set this as 'left_' or 'right_'.")
+            ]
         actions += [
-            LogInfo(msg="\n\n[WARN] 'namespace' is empty — Using default joint names without prefix."),
-            LogInfo(msg="If using multiple arms, you probably want to set this as 'left_' or 'right_'.")
+            Node(
+                package='manip_facts_lab',
+                executable='add_virtual_walls',
+                name='add_virtual_walls',
+                parameters=[{'namespace': ns}]
+            ),
+            Node(
+                package='manip_facts_lab',
+                executable='go_to_pose_node',
+                name='go_to_pose_node',
+                parameters=[{'namespace': ns}]
+            ),
         ]
     return actions
 
@@ -20,22 +48,12 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'namespace',
             default_value='',
-            description='Prefix for joint names (e.g., left_ or right_)'
+            description='Prefix for joint names (e.g., left_ or right_) — ignored if dual mode is enabled'
         ),
-
-        OpaqueFunction(function=check_namespace_prefix),
-
-        Node(
-            package='manip_facts_lab',
-            executable='add_virtual_walls',
-            name='add_virtual_walls',
-            parameters=[{'namespace': LaunchConfiguration('namespace')}]
+        DeclareLaunchArgument(
+            'dual',
+            default_value='true',
+            description='Launch in dual-arm mode (spawns go_to_pose_node for left_ and right_)'
         ),
-
-        Node(
-            package='manip_facts_lab',
-            executable='go_to_pose_node',
-            name='go_to_pose_node',
-            parameters=[{'namespace': LaunchConfiguration('namespace')}]
-        ),
+        OpaqueFunction(function=setup_nodes)
     ])

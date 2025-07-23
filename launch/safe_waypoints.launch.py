@@ -2,25 +2,78 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction, LogInfo, Shutdown
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+import os
 
 
-def check_required_arguments(context, *args, **kwargs):
-    csv_filename = LaunchConfiguration('csv_filename').perform(context)
-    namespace_prefix = LaunchConfiguration('namespace').perform(context)
+def setup_nodes(context, *args, **kwargs):
+    dual = LaunchConfiguration('dual').perform(context).lower() == 'true'
+
+    raw_csv_input = LaunchConfiguration('csv_filename').perform(context)
+    csv_prefix = raw_csv_input[:-4] if raw_csv_input.endswith('.csv') else raw_csv_input
+
+    ns = LaunchConfiguration('namespace').perform(context)
 
     actions = []
 
-    if not csv_filename:
+    if not csv_prefix:
         actions += [
             LogInfo(msg="\n\n[ERROR] Missing required launch argument 'csv_filename'."),
-            LogInfo(msg="Example usage: ros2 launch manip_facts_lab safe_waypoints_launch.py csv_filename:=waypoints.csv namespace:=left_"),
+            LogInfo(msg="Example: ros2 launch manip_facts_lab safe_waypoints_launch.py csv_filename:=waypoints namespace:=left_"),
             Shutdown()
         ]
+        return actions
 
-    if not namespace_prefix:
+    if dual:
+        left_csv = csv_prefix + '_left.csv'
+        right_csv = csv_prefix + '_right.csv'
+        fallback_csv = csv_prefix + '.csv'
+
+        left_exists = os.path.exists(left_csv)
+        right_exists = os.path.exists(right_csv)
+
+        if left_exists and right_exists:
+            actions.append(LogInfo(msg=f"\n[INFO] Dual mode — Using: {left_csv} and {right_csv}"))
+            csv_files = {'left_': left_csv, 'right_': right_csv}
+        else:
+            actions.append(LogInfo(
+                msg=f"\n[WARN] One or both of {left_csv}, {right_csv} not found — falling back to: {fallback_csv} for both"))
+            csv_files = {'left_': fallback_csv, 'right_': fallback_csv}
+
+        for prefix in ['left_', 'right_']:
+            actions.append(
+                Node(
+                    package='manip_facts_lab',
+                    executable='waypoints_node',
+                    name=f'{prefix}waypoints_node',
+                    parameters=[
+                        {'namespace': prefix},
+                        {'csv_filename': csv_files[prefix]}
+                    ],
+                )
+            )
+
+    else:
+        if not ns:
+            actions += [
+                LogInfo(msg="\n\n[WARN] 'namespace' is empty — Using default joint names without prefix."),
+                LogInfo(msg="If using multiple arms, you probably want to set this as 'left_' or 'right_'.")
+            ]
         actions += [
-            LogInfo(msg="\n\n[WARN] 'namespace' is empty — Using default joint names without prefix."),
-            LogInfo(msg="If using multiple arms, you probably want to set this as 'left_' or 'right_'.")
+            Node(
+                package='manip_facts_lab',
+                executable='add_virtual_walls',
+                name='add_virtual_walls',
+                parameters=[{'namespace': ns}]
+            ),
+            Node(
+                package='manip_facts_lab',
+                executable='waypoints_node',
+                name='waypoints_node',
+                parameters=[
+                    {'namespace': ns},
+                    {'csv_filename': csv_prefix + '.csv'}
+                ],
+            ),
         ]
 
     return actions
@@ -31,30 +84,17 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'csv_filename',
             default_value='',
-            description='Path to the CSV file with waypoints'
+            description="Base name for CSV files. In dual mode, uses <base>_left.csv and <base>_right.csv if both exist, otherwise falls back to <base>.csv for both"
         ),
         DeclareLaunchArgument(
             'namespace',
             default_value='',
-            description='Prefix for joint names (e.g., left_ or right_)'
+            description='Prefix for joint names (e.g., left_ or right_) — used only in single-arm mode'
         ),
-
-        OpaqueFunction(function=check_required_arguments),
-
-        Node(
-            package='manip_facts_lab',
-            executable='add_virtual_walls',
-            name='add_virtual_walls',
-            parameters=[{'namespace': LaunchConfiguration('namespace')}]
+        DeclareLaunchArgument(
+            'dual',
+            default_value='true',
+            description='If true, launches waypoints_node for both arms'
         ),
-
-        Node(
-            package='manip_facts_lab',
-            executable='waypoints_node',
-            name='waypoints_node',
-            parameters=[
-                {'csv_filename': LaunchConfiguration('csv_filename')},
-                {'namespace': LaunchConfiguration('namespace')}
-            ],
-        ),
+        OpaqueFunction(function=setup_nodes)
     ])

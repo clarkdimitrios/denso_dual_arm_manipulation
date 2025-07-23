@@ -12,9 +12,8 @@ class WallPublisher(Node):
     def __init__(self):
         super().__init__("add_virtual_wall")
 
-        # Declare parameters with correct default types
         self.declare_parameter('namespace', '')
-        self.declare_parameter('walls', [''])  # Must be a list of strings by default
+        self.declare_parameter('walls', [''])
 
         ns = self.get_parameter('namespace').value
         walls_param = self.get_parameter('walls').value  # List[str]

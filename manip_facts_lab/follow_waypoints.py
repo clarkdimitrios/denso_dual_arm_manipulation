@@ -15,9 +15,9 @@ class WaypointPlanner(Node):
     def __init__(self):
         super().__init__('waypoints_node')
 
-        self.declare_parameter('namespace', '') #expected: left_, right_
+        self.declare_parameter('namespace', '')  # expected: left_, right_
         ns = self.get_parameter('namespace').get_parameter_value().string_value
-        joint_names = [f"{ns}joint_{i}" for i in range(1,7)]
+        joint_names = [f"{ns}joint_{i}" for i in range(1, 7)]
 
         if not ns:
             self.get_logger().warn(
@@ -28,14 +28,15 @@ class WaypointPlanner(Node):
                 "  ros2 run manip_facts_lab waypoints_optim_node --ros-args -p namespace:=<prefix>\n"
             )
 
-
         self.moveit2 = MoveIt2(
             node=self,
-            joint_names=joint_names, #["joint_1", "joint_2", "joint_3", "joint_4", "joint_5", "joint_6"],
-            base_link_name=f"{ns}base_link", #"base_link",
-            end_effector_name=f"{ns}J6", #"J6",
-            group_name=f"{ns}arm", #"arm"
+            joint_names=joint_names,
+            base_link_name=f"{ns}base_link",
+            end_effector_name=f"{ns}J6",
+            group_name=f"{ns}arm",
         )
+
+        self.get_logger().info(f"Initialized MoveIt2 with joints: {joint_names}")
 
         self.declare_parameter("csv_filename", "")
         csv_filename = self.get_parameter("csv_filename").get_parameter_value().string_value
@@ -48,12 +49,15 @@ class WaypointPlanner(Node):
             )
             rclpy.shutdown()
             return
-        
+
+        # Add .csv extension if missing
+        if not csv_filename.endswith(".csv"):
+            csv_filename += ".csv"
+
         pkg_path = get_package_share_directory('manip_facts_lab')
         csv_path = os.path.join(pkg_path, 'waypoints', csv_filename)
         self.get_logger().info(f"Loading waypoints from: {csv_path}")
         self.execute_waypoints_from_csv(csv_path)
-
 
     def pose_from_row(self, row):
         x, y, z = float(row[0]), float(row[1]), float(row[2])
@@ -90,6 +94,7 @@ class WaypointPlanner(Node):
                     pose = self.pose_from_row(row)
                     self.get_logger().info(f"Moving to waypoint {i + 1}...")
                     self.moveit2.move_to_pose(pose)
+                    self.get_logger().info(f"Sending pose command using joints: {self.moveit2.joint_names}")
                     success = self.moveit2.wait_until_executed()
                     if success:
                         self.get_logger().info(f"Arrived at waypoint {i + 1}")

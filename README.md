@@ -52,6 +52,8 @@ To launch the dual-arm robot in **RViz** and **Gazebo**:
 ```bash
 ros2 launch manip_facts_lab comb_multi_robot_bringup.launch.py sim:=true
 ```
+![Dual Arm Demo](docs/dual_arm_rviz.png)
+
 
 ---
 

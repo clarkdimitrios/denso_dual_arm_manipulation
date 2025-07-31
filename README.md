@@ -47,6 +47,9 @@ source install/setup.bash
 
 ## Usage
 
+### Dual-Arm Setup
+To specify the inter-arm distance (in meters), edit the `right_arm_x` parameter in `urdf/dual_denso_robot_macro.xacro` (line 8).
+
 ### Simulation Mode
 To launch the dual-arm robot in **RViz** and **Gazebo**:
 ```bash

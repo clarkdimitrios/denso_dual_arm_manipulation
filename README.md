@@ -22,10 +22,11 @@ This work is based on the official [Denso Robotics ROS2 repository](https://gith
 
 ## Download & Installation
 
-### 1. Clone the repository into your ROS 2 workspace
+### 1. Clone the required repositories into your ROS 2 workspace
 ```bash
 cd ~/ros2_ws/src
 git clone https://github.com/clarkdimitrios/denso_manipulation.git
+git clone https://github.com/DENSORobotics/ros2_denso_robot.git
 ```
 
 ### 2. Install dependencies

@@ -3,7 +3,7 @@
 This package provides ROS 2 launch files, URDF models, and Python scripts for controlling a **dual-arm Denso VM-60B1 industrial robot** in both **simulation** and **real hardware** modes using MoveIt2.  
 It supports **coordinated dual-arm planning**, **waypoint-based motion execution**, and **URDF/Xacro-based robot description**.
 
-This work is based on the official [Denso Robotics ROS2 repository](https://github.com/DENSORobotics/ros2_denso_robot) with significant modifications for:
+This work is based on the official [Denso Robotics ROS2 repository](https://github.com/DENSORobot/denso_robot_ros2) with significant modifications for:
 - Dual-arm robot configuration
 - CSV waypoint trajectory execution
 - Coordinated `dual_arm` MoveIt2 planning group
@@ -99,7 +99,7 @@ right_joint_1,right_joint_2,right_joint_3,right_joint_4,right_joint_5,right_join
 - [MoveIt2](https://moveit.ai/)
 - [pymoveit2](https://github.com/AndrejOrsula/pymoveit2)
 - Gazebo (optional for simulation)
-- Official [Denso ROS2 drivers](https://github.com/DENSORobotics/ros2_denso_robot)
+- Official [Denso ROS2 drivers](https://github.com/DENSORobot/denso_robot_ros2)
 
 ---
 

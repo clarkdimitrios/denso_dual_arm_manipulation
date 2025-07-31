@@ -70,6 +70,7 @@ ros2 launch manip_facts_lab comb_multi_robot_bringup.launch.py
 
 ### Virtual Walls/Objects
 For safety, you can add virtual walls in the robot's workspace by editing `config/virtual_walls.yaml`. This restricts MoveIt2 from planning trajectories colliding with these walls/objects.
+Note that controller-level safety areas can also be set using the Teach Pendant or Wincaps III for added safety at a low-level.
 
 #### Notes:
 - If the hardware setup is not complete (arm calibration, wire shorts for emergency signals and auto-enable), refer to [DENSO documentation](https://www.densorobotics.com/products/controllers/rc8a-controller/).

@@ -1,6 +1,6 @@
 # Denso VM-60B1 Dual-Arm ROS 2 + MoveIt2
 
-This package provides ROS 2 launch files, URDF models, and Python scripts for controlling a **dual-arm Denso VM-60B1 industrial robot** in both **simulation** and **real hardware** modes using MoveIt2.  
+This package provides ROS 2 launch files, URDF models, and Python scripts for controlling a **dual-arm Denso VM-60B1 industrial robot system** in both **simulation** and **real hardware** modes using MoveIt2.  
 It supports **coordinated dual-arm planning**, **waypoint-based motion execution**, and **URDF/Xacro-based robot descriptions**.
 
 This work is based on the official [Denso Robotics ROS2 repository](https://github.com/DENSORobot/denso_robot_ros2) with significant modifications for:
@@ -71,7 +71,7 @@ ros2 launch manip_facts_lab comb_multi_robot_bringup.launch.py
 For safety, you can add virtual walls in the robot's workspace by editing `config/virtual_walls.yaml`. This restricts MoveIt2 from planning trajectories colliding with these walls/objects.
 
 #### Notes:
-- If the hardware setup is not complete (arm calibration, wire shorts for emergency signals and auto-enable), refer to DENSO documentation.
+- If the hardware setup is not complete (arm calibration, wire shorts for emergency signals and auto-enable), refer to [DENSO documentation](https://www.densorobotics.com/products/controllers/rc8a-controller/).
 - If virtual fences are enabled using the Teach Pendant or Wincaps III, it may restrict operations. Can easily be disabled.
 - Recommended: change settings to only allow Manual operation whenever the robot collides or enters restricted areas.
 
@@ -111,5 +111,6 @@ right_joint_1,right_joint_2,right_joint_3,right_joint_4,right_joint_5,right_join
 
 ## License & Credits
 - Original Denso ROS 2 repository: [DENSORobotics/ros2_denso_robot](https://github.com/DENSORobot/denso_robot_ros2)
+- Official Denso Robotics documentation: [Denso Robotics RC8A Controller Manual](https://www.densorobotics.com/products/controllers/rc8a-controller/)
 - Modifications for dual-arm planning and waypoint execution by **Clark Abourjeily**.
 - License: See [LICENSE](LICENSE).

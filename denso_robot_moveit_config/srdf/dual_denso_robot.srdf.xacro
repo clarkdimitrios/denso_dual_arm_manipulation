@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="$(arg model)">
+
+  <!-- robot name parameter -->
+  <xacro:arg name="model" default="vm60b1"/>
+  <!-- parameters -->
+  <xacro:arg name="namespace" default="" />
+
+  <xacro:include filename="$(find denso_robot_moveit_config)/robots/$(arg model)/srdf/dual_denso_robot_macro.srdf.xacro"/>
+
+  <xacro:dual_denso_robot_srdf model="$(arg model)"/>
+
+</robot>

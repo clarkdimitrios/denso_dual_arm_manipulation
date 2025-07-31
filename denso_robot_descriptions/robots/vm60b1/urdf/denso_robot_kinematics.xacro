@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<xacro:macro name="denso_robot_arm_kinematics" params="namespace model">
+		<link name="world"/>
+		<joint name="${namespace}joint_w" type="fixed">
+			<parent link="world"/>
+			<child link="${namespace}base_link"/>
+		</joint>
+		<link name="${namespace}base_link">
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/base_link.dae" scale="1 1 1"/>
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/base_link.dae" scale="1 1 1"/>
+				</geometry>
+			</collision>
+			<inertial>
+				<mass value="1"/>
+				<origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
+				<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+			</inertial>
+		</link>
+		<link name="${namespace}J1">
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J1.dae" scale="1 1 1"/>
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J1.dae" scale="1 1 1"/>
+				</geometry>
+			</collision>
+			<inertial>
+				<mass value="1"/>
+				<origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
+				<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+			</inertial>
+		</link>
+		<joint name="${namespace}joint_1" type="revolute">
+			<parent link="${namespace}base_link"/>
+			<child link="${namespace}J1"/>
+			<origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.280000"/>
+			<axis xyz="-0.000000 -0.000000 1.000000"/>
+			<limit effort="1" lower="-2.96705972839036" upper="2.96705972839036" velocity="3.73064127613788"/>
+			<dynamics damping="0" friction="0"/>
+		</joint>
+		<link name="${namespace}J2">
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J2.dae" scale="1 1 1"/>
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J2.dae" scale="1 1 1"/>
+				</geometry>
+			</collision>
+			<inertial>
+				<mass value="1"/>
+				<origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
+				<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+			</inertial>
+		</link>
+		<joint name="${namespace}joint_2" type="revolute">
+			<parent link="${namespace}J1"/>
+			<child link="${namespace}J2"/>
+			<origin rpy="0.000000 0.000000 0.000000" xyz="0.108999 -0.181083 0.193078"/>
+			<axis xyz="1.000000 -0.000000 -0.000000"/>
+			<limit effort="1" lower="-1.570796326794897" upper="2.356194490192345" velocity="2.48709418409192"/>
+			<dynamics damping="0" friction="0"/>
+		</joint>
+		<link name="${namespace}J3">
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J3.dae" scale="1 1 1"/>
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J3.dae" scale="1 1 1"/>
+				</geometry>
+			</collision>
+			<inertial>
+				<mass value="1"/>
+				<origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
+				<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+			</inertial>
+		</link>
+		<joint name="${namespace}joint_3" type="revolute">
+			<parent link="${namespace}J2"/>
+			<child link="${namespace}J3"/>
+			<origin rpy="-1.5708 0.000000 0.000000" xyz="-0.039 0.000000 0.519992"/>
+			<axis xyz="1.000000 -0.000000 -0.000000"/>
+			<limit effort="1" lower="-1.396263401595464" upper="2.932153143350472" velocity="2.71540943019156"/>
+			<dynamics damping="0" friction="0"/>
+		</joint>
+		<link name="${namespace}J4">
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J4.dae" scale="1 1 1"/>
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J4.dae" scale="1 1 1"/>
+				</geometry>
+			</collision>
+			<inertial>
+				<mass value="1"/>
+				<origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
+				<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+			</inertial>
+		</link>
+		<joint name="${namespace}joint_4" type="revolute">
+			<parent link="${namespace}J3"/>
+			<child link="${namespace}J4"/>
+			<origin rpy="0.000000 0.000000 0.000000" xyz="-0.069999 -0.250997 0.10003"/>
+			<axis xyz="-0.000000 -1.000000 -0.000000"/>
+			<limit effort="1" lower="-3.228859116189509" upper="3.228859116189509" velocity="3.73064127613788"/>
+			<dynamics damping="0" friction="0"/>
+		</joint>
+		<link name="${namespace}J5">
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J5.dae" scale="1 1 1"/>
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J5.dae" scale="1 1 1"/>
+				</geometry>
+			</collision>
+			<inertial>
+				<mass value="1"/>
+				<origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
+				<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+			</inertial>
+		</link>
+		<joint name="${namespace}joint_5" type="revolute">
+			<parent link="${namespace}J4"/>
+			<child link="${namespace}J5"/>
+			<origin rpy="0.000000 0.000000 0.000000" xyz="0.025 -0.33899 0.000000"/>
+			<axis xyz="1.000000 -0.000000 -0.000000"/>
+			<limit effort="1" lower="-2.0943951023932" upper="2.0943951023932" velocity="2.87060410727889"/>
+			<dynamics damping="0" friction="0"/>
+		</joint>
+		<link name="${namespace}J6">
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J6.dae" scale="1 1 1"/>
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="0 0 0" xyz="0 0 0"/>
+				<geometry>
+					<mesh filename="file:///$(find denso_robot_descriptions)/robots/$(arg model)/meshes/J6.dae" scale="1 1 1"/>
+				</geometry>
+			</collision>
+			<inertial>
+				<mass value="1"/>
+				<origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
+				<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+			</inertial>
+		</link>
+		<joint name="${namespace}joint_6" type="revolute">
+			<parent link="${namespace}J5"/>
+			<child link="${namespace}J6"/>
+			<origin rpy="0.000000 0.000000 0.000000" xyz="-0.025 -0.084 0.000000"/>
+			<axis xyz="0.000000 1.000000 -0.000000"/>
+			<limit effort="1" lower="-6.28318530717959" upper="6.28318530717959" velocity="5.96902604182061"/>
+			<dynamics damping="0" friction="0"/>
+		</joint>
+	</xacro:macro>
+</robot>

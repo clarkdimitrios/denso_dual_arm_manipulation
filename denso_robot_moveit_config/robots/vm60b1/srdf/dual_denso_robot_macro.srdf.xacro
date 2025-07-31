@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:arg name="model" default="vm60b1"/>
+
+  <xacro:macro name="dual_denso_robot_srdf" params="model">
+
+    <!-- Include single-arm SRDF macro -->
+    <xacro:include filename="$(find denso_robot_moveit_config)/robots/$(arg model)/srdf/denso_robot_macro.srdf.xacro"/>
+
+    <!-- Instantiate left arm -->
+    <xacro:denso_robot_srdf name="$(arg model)" namespace="left_" />
+
+    <!-- Instantiate right arm -->
+    <xacro:denso_robot_srdf name="$(arg model)" namespace="right_" />
+
+    <!-- Dual Arm Group -->
+    <group name="dual_arm">
+      <!-- <group name="left_arm"/>
+      <group name="right_arm"/> -->
+      <joint name="left_joint_1"/>
+      <joint name="left_joint_2"/>
+      <joint name="left_joint_3"/>
+      <joint name="left_joint_4"/>
+      <joint name="left_joint_5"/>
+      <joint name="left_joint_6"/>
+      <joint name="right_joint_1"/>
+      <joint name="right_joint_2"/>
+      <joint name="right_joint_3"/>
+      <joint name="right_joint_4"/>
+      <joint name="right_joint_5"/>
+      <joint name="right_joint_6"/>
+    </group>
+
+  </xacro:macro>
+
+</robot>
+

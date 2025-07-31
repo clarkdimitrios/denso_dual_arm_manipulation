@@ -7,6 +7,8 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from pymoveit2 import MoveIt2
 
+# TODO: Fix so that it uses poses not joint angles, probably requires per-arm controllers, not a single one...
+
 
 class DualArmWaypointPlanner(Node):
     def __init__(self):

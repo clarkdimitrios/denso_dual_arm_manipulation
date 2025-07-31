@@ -79,7 +79,7 @@ For safety, you can add virtual walls in the robot's workspace by editing `confi
 
 ### Waypoint Execution from CSV
 ```bash
-ros2 launch manip_facts_lab dual_waypoints_launch csv_filename:=waypoints_0.csv
+ros2 launch manip_facts_lab dual_waypoints.launch.py csv_filename:=waypoints_0.csv
 ```
 
 **Example CSV format:**
@@ -110,6 +110,6 @@ right_joint_1,right_joint_2,right_joint_3,right_joint_4,right_joint_5,right_join
 ---
 
 ## License & Credits
-- Original Denso ROS 2 repository: [DENSORobotics/ros2_denso_robot](https://github.com/DENSORobotics/ros2_denso_robot)
-- Modifications for dual-arm planning and waypoint execution by **<clarkdimitrios>**.
+- Original Denso ROS 2 repository: [DENSORobotics/ros2_denso_robot](https://github.com/DENSORobot/denso_robot_ros2)
+- Modifications for dual-arm planning and waypoint execution by **Clark Abourjeily**.
 - License: See [LICENSE](LICENSE).

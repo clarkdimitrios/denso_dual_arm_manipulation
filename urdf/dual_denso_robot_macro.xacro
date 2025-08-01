@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
 
-  <!-- Edit the value of right_arm_x to reflect actual distance between both arms in meters -->
   <xacro:macro name="dual_denso_robot" params="
     model
-    sim:=False
-    right_arm_x:=2.0"> <!-- Edit this value -->
+    sim:=False"
+  >
 
     <xacro:arg name="model" default="vm60b1"/>
 
@@ -13,6 +12,9 @@
 
     <!-- Include your single-arm macro -->
     <xacro:include filename="$(find manip_facts_lab)/urdf/denso_robot_macro.xacro" />
+
+    <!-- Include distance property -->
+    <xacro:include filename="$(find manip_facts_lab)/config/distance.xacro" />
 
     <!-- Left Arm Instance -->
     <xacro:denso_robot

@@ -22,21 +22,23 @@ This work is based on the official [Denso Robotics ROS2 repository](https://gith
 
 ## Download & Installation
 
-### 1. Clone the required repositories into your ROS 2 workspace
+### 1. Clone the repository into your ROS 2 workspace
 ```bash
 cd ~/ros2_ws/src
 git clone https://github.com/clarkdimitrios/denso_manipulation.git
-git clone https://github.com/DENSORobotics/ros2_denso_robot.git
 ```
 
-### 2. Install dependencies
+### 2. Clone the forked repository for Denso Robot ROS 2 packages
+Follow the Installation instructions [here](https://github.com/clarkdimitrios/denso_robot_ros2.git).
+
+### 3. Install dependencies
 ```bash
 sudo apt update
 sudo apt install ros-humble-moveit ros-humble-gazebo-ros-pkgs
 pip install pymoveit2
 ```
 
-### 3. Build the package
+### 4. Build the package
 ```bash
 cd ~/ros2_ws
 colcon build

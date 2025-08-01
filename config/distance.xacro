@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Distance between the two robot bases -->
+  <xacro:property name="right_arm_x" value="1.5"/>
+</robot>
+

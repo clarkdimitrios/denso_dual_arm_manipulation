@@ -87,16 +87,25 @@ Note that controller-level safety areas can also be set using the Teach Pendant 
 ---
 
 ### Waypoint Execution from CSV
+- The following will try to find `<csv_filename>_left.csv` and `csv_filename>_right.csv`. If not both exist, falls back to `<csv_filename>.csv` for both.
+- Upload all waypoint sequences as `csv` files in the `waypoints` folder.
+- Note the `cartesian` launch argument. If `true`, uses cartesian coordinates, else uses joint space configurations (joint angles in degrees).  
 ```bash
-ros2 launch dual_denso_arm_manipulation dual_waypoints.launch.py csv_filename:=waypoints_0.csv
+ros2 launch dual_denso_arm_manipulation dual_waypoints.launch.py cartesian:=true csv_filename:=<csv_filename>.csv
 ```
 
-**Example CSV format:**
+**Example CSV format (Joint space):**
 ```csv
-left_joint_1,left_joint_2,left_joint_3,left_joint_4,left_joint_5,left_joint_6,
-right_joint_1,right_joint_2,right_joint_3,right_joint_4,right_joint_5,right_joint_6
-0,0,0,0,0,0, 0,0,0,0,0,0
-0.1,0.2,0,0,0,0, 0.1,0.2,-0.5,0,0,0
+<joint_1>, <joint_2>, <joint_3>, <joint_4>, <joint_5>, <joint_6>
+90,120,0,0,0,180 
+0,120,-45,-90,0,180
+```
+
+**Example CSV format (Cartesian space):**
+```csv
+<x>, <y>, <z>, <roll>, <pitch>, <yaw>
+0.8,-0.5,1.0,0,90,180 
+0.8,0,0.75,-30,60,-45
 ```
 
 ---

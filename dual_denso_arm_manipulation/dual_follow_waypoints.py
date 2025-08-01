@@ -6,6 +6,7 @@ import csv
 import os
 from ament_index_python.packages import get_package_share_directory
 from pymoveit2 import MoveIt2
+from math import radians
 
 # TODO: Fix so that it uses poses not joint angles, probably requires per-arm controllers, not a single one...
 
@@ -67,7 +68,7 @@ class DualArmWaypointPlanner(Node):
 
     def parse_row(self, row):
         try:
-            values = [float(v) for v in row]
+            values = [radians(float(v)) for v in row]
             if len(values) == 3:
                 values += [0.0, 0.0, 0.0]
             elif len(values) != 6:

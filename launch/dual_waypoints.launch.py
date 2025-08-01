@@ -9,6 +9,7 @@ import os
 def setup_nodes(context, *args, **kwargs):
     raw_csv_input = LaunchConfiguration('csv_filename').perform(context)
     csv_prefix = raw_csv_input[:-4] if raw_csv_input.endswith('.csv') else raw_csv_input
+    cartesian_mode = LaunchConfiguration('cartesian').perform(context).lower() in ['true', '1', 'yes']
 
     actions = []
 
@@ -37,11 +38,16 @@ def setup_nodes(context, *args, **kwargs):
             msg=f"\n[WARN] One or both of {left_csv}, {right_csv} not found — falling back to: {fallback_csv} for both"
         ))
 
+    # Select executable based on cartesian_mode flag
+    exec_name = 'dual_cartesian_waypoints_node' if cartesian_mode else 'dual_arm_waypoints_node'
+    mode_label = "Cartesian" if cartesian_mode else "Joint Space"
+    actions.append(LogInfo(msg=f"\n[INFO] Launching in {mode_label} mode using executable: {exec_name}"))
+
     actions.append(
         Node(
             package='dual_denso_arm_manipulation',
-            executable='dual_arm_waypoints_node',
-            name='dual_arm_waypoints_node',
+            executable=exec_name,
+            name=exec_name,
             parameters=[{'csv_filename': csv_prefix}],
         )
     )
@@ -55,6 +61,11 @@ def generate_launch_description():
             'csv_filename',
             default_value='',
             description="Base name for CSV files. Uses <base>_left.csv and <base>_right.csv if both exist, otherwise falls back to <base>.csv for both arms"
+        ),
+        DeclareLaunchArgument(
+            'cartesian',
+            default_value='false',
+            description="If true, use Cartesian mode (dual_cartesian_waypoints_node) instead of joint space"
         ),
         OpaqueFunction(function=setup_nodes)
     ])

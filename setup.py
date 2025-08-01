@@ -29,6 +29,7 @@ setup(
             'add_virtual_walls = dual_denso_arm_manipulation.add_virtual_wall:main',
             'waypoints_node = dual_denso_arm_manipulation.follow_waypoints:main',
             'dual_arm_waypoints_node = dual_denso_arm_manipulation.dual_follow_waypoints:main',
+            'dual_cartesian_waypoints_node = dual_denso_arm_manipulation.dual_cartesian_waypoints:main',
             'waypoints_optim_node = dual_denso_arm_manipulation.follow_waypoints_optim:main',
             'robust_waypoints_node = dual_denso_arm_manipulation.robust_waypoints_optim:main',
         ],

@@ -36,7 +36,7 @@ class DualArmWaypointPlanner(Node):
             self.get_logger().error(
                 "\n\nMissing required parameter 'csv_filename'.\n"
                 "Run with:\n"
-                "  ros2 run manip_facts_lab dual_arm_waypoints_node --ros-args -p csv_filename:=waypoints_0\n"
+                "  ros2 run dual_denso_arm_manipulation dual_arm_waypoints_node --ros-args -p csv_filename:=waypoints_0\n"
             )
             rclpy.shutdown()
             return
@@ -45,7 +45,7 @@ class DualArmWaypointPlanner(Node):
         if base_filename.endswith(".csv"):
             base_filename = base_filename[:-4]
 
-        pkg_path = get_package_share_directory('manip_facts_lab')
+        pkg_path = get_package_share_directory('dual_denso_arm_manipulation')
         waypoints_dir = os.path.join(pkg_path, 'waypoints')
 
         left_file = os.path.join(waypoints_dir, f"{base_filename}_left.csv")

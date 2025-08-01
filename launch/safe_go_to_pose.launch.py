@@ -14,7 +14,7 @@ def setup_nodes(context, *args, **kwargs):
         for prefix in ['left_', 'right_']:
             actions.append(
                 Node(
-                    package='manip_facts_lab',
+                    package='dual_denso_arm_manipulation',
                     executable='go_to_pose_node',
                     name=f'{prefix}go_to_pose_node',
                     parameters=[{'namespace': prefix}]
@@ -28,13 +28,13 @@ def setup_nodes(context, *args, **kwargs):
             ]
         actions += [
             Node(
-                package='manip_facts_lab',
+                package='dual_denso_arm_manipulation',
                 executable='add_virtual_walls',
                 name='add_virtual_walls',
                 parameters=[{'namespace': ns}]
             ),
             Node(
-                package='manip_facts_lab',
+                package='dual_denso_arm_manipulation',
                 executable='go_to_pose_node',
                 name='go_to_pose_node',
                 parameters=[{'namespace': ns}]

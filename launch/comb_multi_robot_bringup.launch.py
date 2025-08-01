@@ -35,11 +35,11 @@ def generate_launch_description():
     )
 
     add_virtual_walls_node = Node(
-        package='manip_facts_lab',
+        package='dual_denso_arm_manipulation',
         executable='add_virtual_walls',
         name='add_virtual_walls',
         parameters=[os.path.join(
-            get_package_share_directory('manip_facts_lab'),
+            get_package_share_directory('dual_denso_arm_manipulation'),
             'config',
             'virtual_walls.yaml'
         )]

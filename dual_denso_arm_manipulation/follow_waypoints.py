@@ -25,7 +25,7 @@ class WaypointPlanner(Node):
                 "using default joint names without prefix.\n"
                 "If you are running with a namespaced robot (e.g., left_ or right_),\n"
                 "make sure to set this parameter with:\n"
-                "  ros2 run manip_facts_lab waypoints_optim_node --ros-args -p namespace:=<prefix>\n"
+                "  ros2 run dual_denso_arm_manipulation waypoints_optim_node --ros-args -p namespace:=<prefix>\n"
             )
 
         self.moveit2 = MoveIt2(
@@ -45,7 +45,7 @@ class WaypointPlanner(Node):
             self.get_logger().error(
                 "\n\nMissing required parameter 'csv_filename'.\n"
                 "Please run with:\n"
-                "  ros2 run manip_facts_lab waypoints_node --ros-args -p csv_filename:=waypoints_0.csv\n"
+                "  ros2 run dual_denso_arm_manipulation waypoints_node --ros-args -p csv_filename:=waypoints_0.csv\n"
             )
             rclpy.shutdown()
             return
@@ -54,7 +54,7 @@ class WaypointPlanner(Node):
         if not csv_filename.endswith(".csv"):
             csv_filename += ".csv"
 
-        pkg_path = get_package_share_directory('manip_facts_lab')
+        pkg_path = get_package_share_directory('dual_denso_arm_manipulation')
         csv_path = os.path.join(pkg_path, 'waypoints', csv_filename)
         self.get_logger().info(f"Loading waypoints from: {csv_path}")
         self.execute_waypoints_from_csv(csv_path)

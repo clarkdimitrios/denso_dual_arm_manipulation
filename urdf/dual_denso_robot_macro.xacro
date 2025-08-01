@@ -11,10 +11,10 @@
     <link name="world"/>
 
     <!-- Include your single-arm macro -->
-    <xacro:include filename="$(find manip_facts_lab)/urdf/denso_robot_macro.xacro" />
+    <xacro:include filename="$(find dual_denso_arm_manipulation)/urdf/denso_robot_macro.xacro" />
 
     <!-- Include distance property -->
-    <xacro:include filename="$(find manip_facts_lab)/config/distance.xacro" />
+    <xacro:include filename="$(find dual_denso_arm_manipulation)/config/distance.xacro" />
 
     <!-- Left Arm Instance -->
     <xacro:denso_robot

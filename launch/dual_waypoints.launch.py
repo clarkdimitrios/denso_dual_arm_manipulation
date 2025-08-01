@@ -15,12 +15,12 @@ def setup_nodes(context, *args, **kwargs):
     if not csv_prefix:
         actions += [
             LogInfo(msg="\n\n[ERROR] Missing required launch argument 'csv_filename'."),
-            LogInfo(msg="Example: ros2 launch manip_facts_lab dual_waypoints.launch.py csv_filename:=waypoints_0"),
+            LogInfo(msg="Example: ros2 launch dual_denso_arm_manipulation dual_waypoints.launch.py csv_filename:=waypoints_0"),
             Shutdown()
         ]
         return actions
 
-    pkg_path = get_package_share_directory('manip_facts_lab')
+    pkg_path = get_package_share_directory('dual_denso_arm_manipulation')
     waypoints_dir = os.path.join(pkg_path, 'waypoints')
 
     left_csv = os.path.join(waypoints_dir, f"{csv_prefix}_left.csv")
@@ -39,7 +39,7 @@ def setup_nodes(context, *args, **kwargs):
 
     actions.append(
         Node(
-            package='manip_facts_lab',
+            package='dual_denso_arm_manipulation',
             executable='dual_arm_waypoints_node',
             name='dual_arm_waypoints_node',
             parameters=[{'csv_filename': csv_prefix}],

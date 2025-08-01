@@ -22,7 +22,7 @@ class GoToPoseNode(Node):
                 "using default joint names without prefix.\n"
                 "If you are running with a namespaced robot (e.g., left_ or right_),\n"
                 "make sure to set this parameter with:\n"
-                "  ros2 run manip_facts_lab waypoints_optim_node --ros-args -p namespace:=<prefix>\n"
+                "  ros2 run dual_denso_arm_manipulation waypoints_optim_node --ros-args -p namespace:=<prefix>\n"
             )
 
 

@@ -18,7 +18,7 @@ def setup_nodes(context, *args, **kwargs):
     if not csv_prefix:
         actions += [
             LogInfo(msg="\n\n[ERROR] Missing required launch argument 'csv_filename'."),
-            LogInfo(msg="Example: ros2 launch manip_facts_lab safe_waypoints_launch.py csv_filename:=waypoints namespace:=left_"),
+            LogInfo(msg="Example: ros2 launch dual_denso_arm_manipulation safe_waypoints_launch.py csv_filename:=waypoints namespace:=left_"),
             Shutdown()
         ]
         return actions
@@ -42,7 +42,7 @@ def setup_nodes(context, *args, **kwargs):
         for prefix in ['left_', 'right_']:
             actions.append(
                 Node(
-                    package='manip_facts_lab',
+                    package='dual_denso_arm_manipulation',
                     executable='waypoints_node',
                     name=f'{prefix}waypoints_node',
                     parameters=[
@@ -60,13 +60,13 @@ def setup_nodes(context, *args, **kwargs):
             ]
         actions += [
             Node(
-                package='manip_facts_lab',
+                package='dual_denso_arm_manipulation',
                 executable='add_virtual_walls',
                 name='add_virtual_walls',
                 parameters=[{'namespace': ns}]
             ),
             Node(
-                package='manip_facts_lab',
+                package='dual_denso_arm_manipulation',
                 executable='waypoints_node',
                 name='waypoints_node',
                 parameters=[

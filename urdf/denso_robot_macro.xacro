@@ -41,7 +41,7 @@
 
     <xacro:include filename="$(find denso_robot_descriptions)/robots/$(arg model)/urdf/denso_robot_transmissions.xacro" />
     <!-- robot kinematics include -->
-    <xacro:include filename="$(find manip_facts_lab)/urdf/denso_robot_kinematics.xacro" />
+    <xacro:include filename="$(find dual_denso_arm_manipulation)/urdf/denso_robot_kinematics.xacro" />
     <!-- ros2 control include -->
     <xacro:include filename="$(find denso_robot_descriptions)/robots/$(arg model)/urdf/denso_robot.ros2_control.xacro" />
     <!-- ros2 control instance -->

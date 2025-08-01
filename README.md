@@ -55,7 +55,7 @@ To specify the inter-arm distance (in meters), edit the `right_arm_x` parameter 
 ### Simulation Mode
 To launch the dual-arm robot in **RViz** and **Gazebo**:
 ```bash
-ros2 launch manip_facts_lab comb_multi_robot_bringup.launch.py sim:=true
+ros2 launch dual_denso_arm_manipulation comb_multi_robot_bringup.launch.py sim:=true
 ```
 ![Dual Arm Demo](docs/dual_arm_rviz.png)
 
@@ -72,7 +72,7 @@ ros2 launch manip_facts_lab comb_multi_robot_bringup.launch.py sim:=true
 4. Ensure each controller has a pendantless dummy plug or a teach pendant plugged in to stay in AUTO Mode.
 5. Launch:
 ```bash
-ros2 launch manip_facts_lab comb_multi_robot_bringup.launch.py
+ros2 launch dual_denso_arm_manipulation comb_multi_robot_bringup.launch.py
 ```
 
 ### Virtual Walls/Objects
@@ -88,7 +88,7 @@ Note that controller-level safety areas can also be set using the Teach Pendant 
 
 ### Waypoint Execution from CSV
 ```bash
-ros2 launch manip_facts_lab dual_waypoints.launch.py csv_filename:=waypoints_0.csv
+ros2 launch dual_denso_arm_manipulation dual_waypoints.launch.py csv_filename:=waypoints_0.csv
 ```
 
 **Example CSV format:**

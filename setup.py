@@ -32,6 +32,7 @@ setup(
             'dual_cartesian_waypoints_node = dual_denso_arm_manipulation.dual_cartesian_waypoints:main',
             'waypoints_optim_node = dual_denso_arm_manipulation.follow_waypoints_optim:main',
             'robust_waypoints_node = dual_denso_arm_manipulation.robust_waypoints_optim:main',
+            'controller_auto_switcher = dual_denso_arm_manipulation.controller_auto_switcher:main',
         ],
     },
 )

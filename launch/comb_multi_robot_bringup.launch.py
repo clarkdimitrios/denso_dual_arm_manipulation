@@ -30,7 +30,7 @@ def generate_launch_description():
             'moveit_controllers_file': 'dual_moveit_controllers.yaml',
             'description_file': 'dual_denso_robot.urdf.xacro',
             'moveit_config_file': 'dual_denso_robot.srdf.xacro',
-            'robot_controller': 'dual_arm_joint_trajectory_controller',
+            'robot_controller': 'dual_arm_joint_trajectory_controller', # left_arm_controller right_arm_controller',
         }.items()
     )
 
@@ -45,8 +45,22 @@ def generate_launch_description():
         )]
     )
 
+    # controller_auto_switcher_node = Node(
+    #     package='dual_denso_arm_manipulation',
+    #     executable='controller_auto_switcher', 
+    #     name='controller_auto_switcher',
+    #     output='screen',
+    #     parameters=[{
+    #         'controllers': [
+    #             'dual_arm_joint_trajectory_controller',
+    #             'left_arm_controller',
+    #             'right_arm_controller'
+    #         ]
+    #     }]
+    # )
+
     return LaunchDescription(declared_arguments + [
         denso_bringup_include,
-        add_virtual_walls_node
+        add_virtual_walls_node,
+        # controller_auto_switcher_node
     ])
-

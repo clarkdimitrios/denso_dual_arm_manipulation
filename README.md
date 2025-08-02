@@ -89,7 +89,7 @@ Note that controller-level safety areas can also be set using the Teach Pendant 
 ### Waypoint Execution from CSV
 - The following will try to find `<csv_filename>_left.csv` and `csv_filename>_right.csv`. If not both exist, falls back to `<csv_filename>.csv` for both.
 - Upload all waypoint sequences as `csv` files in the `waypoints` folder.
-- Note the `cartesian` launch argument. If `true`, uses cartesian coordinates, else uses joint space configurations (joint angles in degrees).  
+- Note the `cartesian` launch argument. If `true`, uses cartesian end-effector coordinates, else uses joint space configurations (joint angles in degrees).  
 ```bash
 ros2 launch dual_denso_arm_manipulation dual_waypoints.launch.py cartesian:=true csv_filename:=<csv_filename>.csv
 ```

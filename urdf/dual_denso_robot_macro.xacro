@@ -14,7 +14,7 @@
     <xacro:include filename="$(find dual_denso_arm_manipulation)/urdf/denso_robot_macro.xacro" />
 
     <!-- Include distance property -->
-    <xacro:include filename="$(find dual_denso_arm_manipulation)/config/distance.xacro" />
+    <xacro:include filename="$(find dual_denso_arm_manipulation)/config/scene_config.xacro" />
 
     <!-- Left Arm Instance -->
     <xacro:denso_robot

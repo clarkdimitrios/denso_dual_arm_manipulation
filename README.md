@@ -14,7 +14,8 @@ This work is based on the official [Denso Robotics ROS2 repository](https://gith
 
 ## Features
 - **Unified Dual-Arm MoveIt2 Control**: Both arms can be planned/executed together or individually.
-- **Waypoint Execution**: Load joint-space waypoints from CSV files.
+- **Waypoint Execution**: Load joint-space or cartesian waypoints from CSV files.
+- **Box Lifting**: Spawn boxes and other objects in simulation for Gazebo.
 - **Simulation & Real Hardware Modes**: Easily switch via a launch argument.
 - **Custom URDF/Xacro**: Full kinematic chain for two 6-DOF arms.
 
@@ -50,7 +51,8 @@ source install/setup.bash
 ## Usage
 
 ### Dual-Arm Setup
-To specify the inter-arm distance (in meters), edit the `right_arm_x` parameter value in `config/distance.xacro`.
+- To specify the inter-arm distance (in meters), edit the `right_arm_x` parameter value in `config/scene_config.xacro`.
+- In the same file, the pose and size of objects spawned in Gazebo can be specified. 
 
 ### Simulation Mode
 To launch the dual-arm robot in **RViz** and **Gazebo**:

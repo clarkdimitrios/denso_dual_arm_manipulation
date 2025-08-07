@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="lift_box">
+
+  <xacro:include filename="$(find dual_denso_arm_manipulation)/config/scene_config.xacro"/>
+
+  <link name="lift_box">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <box size="${lift_box_size_x} ${lift_box_size_y} ${lift_box_size_z}"/>
+      </geometry>
+      <material name="orange">
+        <color rgba="1 0.5 0 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <box size="${lift_box_size_x} ${lift_box_size_y} ${lift_box_size_z}"/>
+      </geometry>
+    </collision>
+  </link>
+
+</robot>

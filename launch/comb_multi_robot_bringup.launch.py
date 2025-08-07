@@ -8,24 +8,17 @@ from ament_index_python.packages import get_package_share_directory
 import os
 import xacro
 import tempfile
-import xml.etree.ElementTree as ET
+
+from dual_denso_arm_manipulation.scripts.utils import get_xacro_properties
+
 
 def get_box_pose():
     distance_path = os.path.join(
         get_package_share_directory('dual_denso_arm_manipulation'),
         'config',
-        'distance.xacro'
+        'scene_config.xacro' 
     )
-
-    tree = ET.parse(distance_path)
-    root = tree.getroot()
-
-    props = {}
-    for prop in root.findall("{http://www.ros.org/wiki/xacro}property"):
-        name = prop.attrib["name"]
-        value = prop.attrib["value"]
-        props[name] = value
-
+    props = get_xacro_properties(distance_path)
     return {
         "x": props.get("lift_box_x", "0.0"),
         "y": props.get("lift_box_y", "0.0"),
@@ -34,6 +27,7 @@ def get_box_pose():
         "P": props.get("lift_box_pitch", "0.0"),
         "Y": props.get("lift_box_yaw", "0.0"),
     }
+
 
 def spawn_box_fn(context, *args, **kwargs):
     lift_box_xacro = os.path.join(
@@ -114,5 +108,5 @@ def generate_launch_description():
         OpaqueFunction(
             function=spawn_box_fn,
             condition=IfCondition(LaunchConfiguration('sim'))
-            )
+        )
     ])

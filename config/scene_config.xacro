@@ -12,9 +12,9 @@
   <xacro:property name="lift_box_pitch" value="0.0"/>
   <xacro:property name="lift_box_yaw" value="0.0"/>
 
-  <xacro:property name="lift_box_size_x" value="0.3"/>
-  <xacro:property name="lift_box_size_y" value="0.2"/>
-  <xacro:property name="lift_box_size_z" value="0.2"/>
+  <xacro:property name="lift_box_size_x" value="0.5"/>
+  <xacro:property name="lift_box_size_y" value="0.4"/>
+  <xacro:property name="lift_box_size_z" value="0.4"/>
 
 </robot>
 

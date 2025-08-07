@@ -68,6 +68,11 @@ def generate_launch_description():
             'sim',
             default_value='false',
             description='Whether to run in simulation mode (true) or connect to real hardware (false)'
+        ),
+        DeclareLaunchArgument(
+            'box',
+            default_value='true',
+            description='Whether to spawn a box in RViz environment'
         )
     ]
 
@@ -102,7 +107,8 @@ def generate_launch_description():
         package='dual_denso_arm_manipulation',
         executable='spawn_lift_box_rviz',
         name='spawn_lift_box_rviz',
-        output='screen'
+        output='screen',
+        condition=IfCondition(LaunchConfiguration('box'))
     )
 
     return LaunchDescription(declared_arguments + [

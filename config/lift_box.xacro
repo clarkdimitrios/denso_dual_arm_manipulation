@@ -11,7 +11,7 @@
     </inertial>
 
     <visual>
-      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <origin xyz="0 0 ${lift_box_size_z / 2}" rpy="0 0 0"/>
       <geometry>
         <box size="${lift_box_size_x} ${lift_box_size_y} ${lift_box_size_z}"/>
       </geometry>
@@ -21,7 +21,7 @@
     </visual>
 
     <collision>
-      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <origin xyz="0 0 ${lift_box_size_z / 2}" rpy="0 0 0"/>
       <geometry>
         <box size="${lift_box_size_x} ${lift_box_size_y} ${lift_box_size_z}"/>
       </geometry>

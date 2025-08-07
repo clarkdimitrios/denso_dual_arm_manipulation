@@ -33,6 +33,7 @@ setup(
             'waypoints_optim_node = dual_denso_arm_manipulation.follow_waypoints_optim:main',
             'robust_waypoints_node = dual_denso_arm_manipulation.robust_waypoints_optim:main',
             'controller_auto_switcher = dual_denso_arm_manipulation.controller_auto_switcher:main',
+            'spawn_lift_box_rviz = dual_denso_arm_manipulation.spawn_lift_box_rviz:main',
         ],
     },
 )

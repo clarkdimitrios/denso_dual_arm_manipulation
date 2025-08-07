@@ -9,16 +9,15 @@ import os
 import xacro
 import tempfile
 
-from dual_denso_arm_manipulation.scripts.utils import get_xacro_properties
-
+from dual_denso_arm_manipulation.utils import get_xacro_properties 
 
 def get_box_pose():
-    distance_path = os.path.join(
+    scene_path = os.path.join(
         get_package_share_directory('dual_denso_arm_manipulation'),
         'config',
         'scene_config.xacro' 
     )
-    props = get_xacro_properties(distance_path)
+    props = get_xacro_properties(scene_path)
     return {
         "x": props.get("lift_box_x", "0.0"),
         "y": props.get("lift_box_y", "0.0"),
@@ -27,7 +26,6 @@ def get_box_pose():
         "P": props.get("lift_box_pitch", "0.0"),
         "Y": props.get("lift_box_yaw", "0.0"),
     }
-
 
 def spawn_box_fn(context, *args, **kwargs):
     lift_box_xacro = os.path.join(
@@ -63,8 +61,6 @@ def spawn_box_fn(context, *args, **kwargs):
             ]
         )
     ]
-
-
 
 def generate_launch_description():
     declared_arguments = [
@@ -102,9 +98,17 @@ def generate_launch_description():
         )]
     )
 
+    spawn_lift_box_node = Node(
+        package='dual_denso_arm_manipulation',
+        executable='spawn_lift_box_rviz',
+        name='spawn_lift_box_rviz',
+        output='screen'
+    )
+
     return LaunchDescription(declared_arguments + [
         denso_bringup_include,
         add_virtual_walls_node,
+        spawn_lift_box_node,
         OpaqueFunction(
             function=spawn_box_fn,
             condition=IfCondition(LaunchConfiguration('sim'))

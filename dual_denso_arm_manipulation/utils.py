@@ -47,4 +47,4 @@ def quat_to_euler_rad(q):
     return transforms3d.euler.quat2euler(q, axes='sxyz')
 
 def quat_to_euler_deg(q):
-    return degrees(transforms3d.euler.quat2euler(q, axes='sxyz'))
+    return [degrees(angle) for angle in transforms3d.euler.quat2euler(q, axes='sxyz')]

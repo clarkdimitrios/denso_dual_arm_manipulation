@@ -1,7 +1,7 @@
 import subprocess
 import xml.etree.ElementTree as ET
 
-from math import radians
+from math import radians, degrees
 import transforms3d
 from geometry_msgs.msg import Pose
 
@@ -26,9 +26,7 @@ def get_xacro_properties(xacro_path):
 
 def pose_euler_to_quat(x, y, z, roll, pitch, yaw):
     "Convert Euler angles (deg) to quaternions and returns Pose"
-    quat = transforms3d.euler.euler2quat(
-        radians(roll), radians(pitch), radians(yaw), axes='sxyz'
-    )
+    quat = euler_to_quat(roll, pitch, yaw)
     pose = Pose()
     pose.position.x = x
     pose.position.y = y
@@ -38,3 +36,15 @@ def pose_euler_to_quat(x, y, z, roll, pitch, yaw):
     pose.orientation.z = quat[3]
     pose.orientation.w = quat[0]
     return pose
+
+def euler_to_quat(roll, pitch, yaw):
+    "Convert Euler angles (deg) to quaternions"
+    return transforms3d.euler.euler2quat(
+        radians(roll), radians(pitch), radians(yaw), axes='sxyz'
+    )
+
+def quat_to_euler_rad(q):
+    return transforms3d.euler.quat2euler(q, axes='sxyz')
+
+def quat_to_euler_deg(q):
+    return degrees(transforms3d.euler.quat2euler(q, axes='sxyz'))

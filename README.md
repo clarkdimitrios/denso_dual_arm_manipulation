@@ -132,5 +132,5 @@ ros2 launch dual_denso_arm_manipulation dual_waypoints.launch.py cartesian:=true
 ## License & Credits
 - Original Denso ROS 2 repository: [DENSORobotics/ros2_denso_robot](https://github.com/DENSORobot/denso_robot_ros2)
 - Official Denso Robotics documentation: [Denso Robotics RC8A Controller Manual](https://www.densorobotics.com/products/controllers/rc8a-controller/)
-- Modifications for dual-arm planning and waypoint execution by **Clark Abourjeily**.
+- Modifications for dual-arm planning and expansions by [Clark Abourjeily](https://github.com/clarkdimitrios).
 - License: See [LICENSE](LICENSE).

@@ -4,6 +4,8 @@
   <xacro:include filename="$(find dual_denso_arm_manipulation)/config/scene_config.xacro"/>
 
   <link name="lift_box">
+    <parent link="world"/>
+    <child link="lift_box"/>
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <mass value="1.0"/>

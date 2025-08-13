@@ -61,6 +61,9 @@ class DualArmCartesianPlanner(Node):
         pkg_path = get_package_share_directory('dual_denso_arm_manipulation')
         waypoints_dir = os.path.join(pkg_path, 'waypoints')
 
+        # Temp hardcode
+        if csv_base == 'lift': waypoints_dir = os.path.join(pkg_path, 'temp')
+
         left_file = os.path.join(waypoints_dir, f"{csv_base}_left.csv")
         right_file = os.path.join(waypoints_dir, f"{csv_base}_right.csv")
         fallback_file = os.path.join(waypoints_dir, f"{csv_base}.csv")

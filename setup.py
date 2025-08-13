@@ -34,6 +34,11 @@ setup(
             'robust_waypoints_node = dual_denso_arm_manipulation.robust_waypoints_optim:main',
             'controller_auto_switcher = dual_denso_arm_manipulation.controller_auto_switcher:main',
             'spawn_lift_box_rviz = dual_denso_arm_manipulation.spawn_lift_box_rviz:main',
+            'box_spawner = dual_denso_arm_manipulation.box_spawner:main',
+            'lift_traj_generator = dual_denso_arm_manipulation.lift_traj_generator:main',
+            'box_pose_sub = dual_denso_arm_manipulation.box_pose_sub:main',
+            'end_effector_pose = dual_denso_arm_manipulation.end_effector_pose:main',
+            'traj_to_csv = dual_denso_arm_manipulation.traj_to_csv:main',
         ],
     },
 )

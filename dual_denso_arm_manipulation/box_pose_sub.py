@@ -18,7 +18,7 @@ class BoxPoseSubscriber(Node):
         # Dictionary to store publishers for each detected box frame
         self.box_publishers = {}
 
-        self.create_timer(1.0, self.get_and_publish_poses)
+        self.create_timer(10.0, self.get_and_publish_poses)
 
     def get_and_publish_poses(self):
         base_frame = self.get_parameter('base_frame').get_parameter_value().string_value

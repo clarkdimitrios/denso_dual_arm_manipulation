@@ -39,6 +39,7 @@ setup(
             'box_pose_sub = dual_denso_arm_manipulation.box_pose_sub:main',
             'end_effector_pose = dual_denso_arm_manipulation.end_effector_pose:main',
             'traj_to_csv = dual_denso_arm_manipulation.traj_to_csv:main',
+            'collision_manager = dual_denso_arm_manipulation.collision_manager:main',
         ],
     },
 )

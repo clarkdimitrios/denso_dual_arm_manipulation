@@ -6,15 +6,15 @@
 
   <!-- Pose and size of additional objects -->
   <xacro:property name="lift_box_x" value="1.0"/>
-  <xacro:property name="lift_box_y" value="0.0"/>
+  <xacro:property name="lift_box_y" value="-0.4"/>
   <xacro:property name="lift_box_z" value="0.0"/>
   <xacro:property name="lift_box_roll" value="0.0"/>
   <xacro:property name="lift_box_pitch" value="0.0"/>
   <xacro:property name="lift_box_yaw" value="0.0"/>
 
-  <xacro:property name="lift_box_size_x" value="0.5"/>
-  <xacro:property name="lift_box_size_y" value="0.4"/>
-  <xacro:property name="lift_box_size_z" value="0.4"/>
+  <xacro:property name="lift_box_size_x" value="0.8"/>
+  <xacro:property name="lift_box_size_y" value="1.0"/>
+  <xacro:property name="lift_box_size_z" value="1.6"/>
 
 </robot>
 

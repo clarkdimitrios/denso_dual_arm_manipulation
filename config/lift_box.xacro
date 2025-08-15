@@ -1,33 +1,49 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="lift_box">
-
   <xacro:include filename="$(find dual_denso_arm_manipulation)/config/scene_config.xacro"/>
 
+  <!-- Parameters (can be in scene_config.xacro too) -->
+  <xacro:property name="m"  value="5.0"/>  <!-- mass [kg] -->
+  <xacro:property name="lx" value="${lift_box_size_x}"/>
+  <xacro:property name="ly" value="${lift_box_size_y}"/>
+  <xacro:property name="lz" value="${lift_box_size_z}"/>
+
+  <!-- Rigid body (free in the world; initial pose comes from spawner) -->
   <link name="lift_box">
-    <parent link="world"/>
-    <child link="lift_box"/>
+    <!-- Correct inertia for a rectangle: Ixx = 1/12 m (ly^2 + lz^2), etc. -->
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="1.0"/>
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      <mass value="${m}"/>
+      <inertia
+        ixx="${(m/12.0) * (ly*ly + lz*lz)}"
+        iyy="${(m/12.0) * (lx*lx + lz*lz)}"
+        izz="${(m/12.0) * (lx*lx + ly*ly)}"
+        ixy="0" ixz="0" iyz="0"/>
     </inertial>
 
+    <!-- Sit on ground by raising the geometry half height -->
     <visual>
-      <origin xyz="0 0 ${lift_box_size_z / 2}" rpy="0 0 0"/>
-      <geometry>
-        <box size="${lift_box_size_x} ${lift_box_size_y} ${lift_box_size_z}"/>
-      </geometry>
-      <material name="orange">
-        <color rgba="1 0.5 0 1"/>
-      </material>
+      <origin xyz="0 0 ${lz/2.0}" rpy="0 0 0"/>
+      <geometry><box size="${lx} ${ly} ${lz}"/></geometry>
+      <material name="orange"><color rgba="1 0.5 0 1"/></material>
     </visual>
 
     <collision>
-      <origin xyz="0 0 ${lift_box_size_z / 2}" rpy="0 0 0"/>
-      <geometry>
-        <box size="${lift_box_size_x} ${lift_box_size_y} ${lift_box_size_z}"/>
-      </geometry>
+      <origin xyz="0 0 ${lz/2.0}" rpy="0 0 0"/>
+      <geometry><box size="${lx} ${ly} ${lz}"/></geometry>
     </collision>
   </link>
 
+  <!-- Gazebo contact/friction parameters -->
+  <gazebo reference="lift_box">
+    <!-- High friction so side-pinching can actually hold -->
+    <mu1>1.5</mu1>
+    <mu2>1.5</mu2>
+
+    <!-- Contact stiffness/damping; tune if still jittery -->
+    <kp>1e6</kp>
+    <kd>1.0</kd>
+    <max_contacts>50</max_contacts>
+    <min_depth>0.001</min_depth>
+  </gazebo>
 </robot>

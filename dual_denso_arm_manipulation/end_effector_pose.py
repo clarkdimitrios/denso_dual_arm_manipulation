@@ -34,7 +34,10 @@ class EndEffectorPoseFetcher(Node):
         self.right_ee_pose_pub = self.create_publisher(Pose, 'right_ee_pose', 10)
 
         # Timer to periodically fetch and publish end effector poses
-        self.create_timer(1.0, self.get_and_publish_end_effector_poses())
+        # self.create_timer(1.0, self.get_and_publish_end_effector_poses)
+
+        self.get_and_publish_end_effector_poses()
+        
 
     def get_and_publish_end_effector_poses(self):
         # Compute FK for left and right arm end effectors

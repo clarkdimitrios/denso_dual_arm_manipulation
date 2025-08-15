@@ -15,7 +15,7 @@ This work is based on the official [Denso Robotics ROS2 repository](https://gith
 ## Features
 - **Unified Dual-Arm MoveIt2 Control**: Both arms can be planned/executed together or individually.
 - **Waypoint Execution**: Load joint-space or cartesian waypoints from CSV files.
-- **Box Lifting**: Spawn boxes and other objects in simulation for Gazebo.
+- **Box Lifting**: Spawn boxes and other objects in simulation for Gazebo, lift boxes in sim or with real hardware.
 - **Simulation & Real Hardware Modes**: Easily switch via a launch argument.
 - **Custom URDF/Xacro**: Full kinematic chain for two 6-DOF arms.
 
@@ -52,7 +52,7 @@ source install/setup.bash
 
 ### Dual-Arm Setup
 - To specify the inter-arm distance (in meters), edit the `right_arm_x` parameter value in `config/scene_config.xacro`.
-- In the same file, the pose and size of objects spawned in Gazebo can be specified. 
+- In the same file, the pose, size, and mass of objects spawned in Gazebo can be specified. Make sure to reflect real objects.
 
 ### Simulation Mode
 To launch the dual-arm robot in **RViz** and **Gazebo**:
@@ -89,7 +89,7 @@ Note that controller-level safety areas can also be set using the Teach Pendant 
 ---
 
 ### Waypoint Execution from CSV
-- The following will try to find `<csv_filename>_left.csv` and `csv_filename>_right.csv`. If not both exist, falls back to `<csv_filename>.csv` for both.
+- The following will try to find `<csv_filename>_left.csv` and `<csv_filename>_right.csv`. If not both exist, falls back to `<csv_filename>.csv` for both.
 - Upload all waypoint sequences as `csv` files in the `waypoints` folder.
 - Note the `cartesian` launch argument. If `true`, uses cartesian end-effector coordinates, else uses joint space configurations (joint angles in degrees).  
 ```bash
@@ -109,6 +109,18 @@ ros2 launch dual_denso_arm_manipulation dual_waypoints.launch.py cartesian:=true
 0.8,-0.5,1.0,0,90,180 
 0.8,0,0.75,-30,60,-45
 ```
+
+---
+
+### Lifting Boxes
+1. If using real hardware, make sure `config/scene_config.xacro` correctly reflects the box properties.
+2. Launch:
+```bash
+ros2 launch dual_denso_arm_manipulation lift_box.launch.py lift_height:=<+z translation>
+```
+
+#### Note:
+Currently only supports 1-D motion along the z-axis.
 
 ---
 

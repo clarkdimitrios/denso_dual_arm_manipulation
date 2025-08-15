@@ -3,7 +3,7 @@
   <xacro:include filename="$(find dual_denso_arm_manipulation)/config/scene_config.xacro"/>
 
   <!-- Parameters (can be in scene_config.xacro too) -->
-  <xacro:property name="m"  value="5.0"/>  <!-- mass [kg] -->
+  <xacro:property name="m"  value="${lift_box_mass}"/>  <!-- mass [kg] -->
   <xacro:property name="lx" value="${lift_box_size_x}"/>
   <xacro:property name="ly" value="${lift_box_size_y}"/>
   <xacro:property name="lz" value="${lift_box_size_z}"/>

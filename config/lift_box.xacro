@@ -35,7 +35,7 @@
   </link>
 
   <!-- Gazebo contact/friction parameters -->
-  <gazebo reference="lift_box">
+  <gazebo reference="lift_box_collision">
     <!-- High friction so side-pinching can actually hold -->
     <mu1>1.5</mu1>
     <mu2>1.5</mu2>

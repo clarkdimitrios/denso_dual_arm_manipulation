@@ -17,6 +17,7 @@ def generate_launch_description():
     pkg_share = get_package_share_directory('dual_denso_arm_manipulation')
     default_temp = os.path.join(pkg_share, 'temp')
 
+    # -------- Launch Configs --------
     lift_height = LaunchConfiguration('lift_height')
     csv_grab = LaunchConfiguration('csv_grab')
     csv_lift = LaunchConfiguration('csv_lift')
@@ -44,9 +45,23 @@ def generate_launch_description():
         }],
     )
 
+
+    # EE-box linker params
+    robot_model      = LaunchConfiguration('robot_model')
+    box_model        = LaunchConfiguration('box_model')
+    left_link        = LaunchConfiguration('left_link')
+    right_link       = LaunchConfiguration('right_link')
+    box_link         = LaunchConfiguration('box_link')
+    attach_left      = LaunchConfiguration('attach_left')
+    attach_right     = LaunchConfiguration('attach_right')
+    attach_on_state  = LaunchConfiguration('attach_on_state')
+    detach_on_state  = LaunchConfiguration('detach_on_state')
+    attach_service   = LaunchConfiguration('attach_service')
+    detach_service   = LaunchConfiguration('detach_service')
+
     return LaunchDescription([
         # -------- Arguments --------
-        DeclareLaunchArgument('lift_height', default_value='0.5',
+        DeclareLaunchArgument('lift_height', default_value='0.8',
                               description='Lift height in the +Z direction'),
         DeclareLaunchArgument('csv_grab', default_value='grab',
                               description='Base CSV filename for left/right grab waypoints'),
@@ -54,6 +69,30 @@ def generate_launch_description():
                               description='Base CSV filename for left/right lift waypoints'),
         DeclareLaunchArgument('temp_folder', default_value=default_temp,
                               description='Path to the temporary folder for CSV files'),
+
+        # EE-box linker args
+        DeclareLaunchArgument('robot_model',     default_value='dual_denso_robot', #'vm60b1',
+                              description='Gazebo model name of the robot'),
+        DeclareLaunchArgument('box_model',       default_value='lift_box',
+                              description='Gazebo model name of the box'),
+        DeclareLaunchArgument('left_link',       default_value='left_J6',
+                              description='Left end-effector link name (inside robot model)'),
+        DeclareLaunchArgument('right_link',      default_value='right_J6',
+                              description='Right end-effector link name (inside robot model)'),
+        DeclareLaunchArgument('box_link',        default_value='lift_box',
+                              description='Box link name (inside box model)'),
+        DeclareLaunchArgument('attach_left',     default_value='true',
+                              description='Attach left EE to box when triggered'),
+        DeclareLaunchArgument('attach_right',    default_value='false',
+                              description='Attach right EE to box when triggered'),
+        DeclareLaunchArgument('attach_on_state', default_value='lift',
+                              description="trajectory_state value that triggers attach"),
+        DeclareLaunchArgument('detach_on_state', default_value='release',
+                              description="trajectory_state value that triggers detach"),
+        DeclareLaunchArgument('attach_service',  default_value='/gazebo/attach',
+                              description='Service name for attach()'),
+        DeclareLaunchArgument('detach_service',  default_value='/gazebo/detach',
+                              description='Service name for detach()'),
 
         # -------- Clean temp BEFORE nodes start --------
         ExecuteProcess(
@@ -83,6 +122,25 @@ def generate_launch_description():
         #     name='collision_manager',
         #     output='screen',
         # ),
+
+        # -------- EE-Box Linker --------
+        Node(
+            package='dual_denso_arm_manipulation',
+            executable='ee_box_linker',
+            name='ee_box_linker',
+            output='screen',
+            parameters=[{
+                'robot_model': 'vm60b1',
+                'box_model': 'lift_box',
+                'left_link': 'left_J6',
+                'right_link': 'right_J6',
+                'box_link': 'lift_box',
+                'attach_left': True,
+                'attach_right': False,
+                'attach_on_state': 'attach',
+                'detach_on_state': 'detach',
+            }],
+        ),
 
         # -------- Trajectory generator (publishes 'grab', waits for ack, then 'lift') --------
         Node(

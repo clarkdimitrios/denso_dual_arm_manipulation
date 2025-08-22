@@ -69,7 +69,7 @@
     <!-- Placeholder for ros2_control transmission which don't yet exist -->
 
     <!-- links -  main serial chain -->
-    <xacro:denso_robot_arm_kinematics namespace="${namespace}" model="${model}" />
+    <xacro:denso_robot_arm_kinematics namespace="${namespace}" model="${model}" sim="${sim}"/>
 
     <!-- <gazebo>
 	    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">

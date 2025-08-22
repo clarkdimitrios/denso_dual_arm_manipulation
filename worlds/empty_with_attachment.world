@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="default">
+    <!-- IFRA LinkAttacher plugin -->
+    <plugin name="gazebo_link_attacher" filename="libgazebo_link_attacher.so"/>
+
+    <!-- Optional: ground + sun -->
+    <include><uri>model://ground_plane</uri></include>
+    <include><uri>model://sun</uri></include>
+  </world>
+</sdf>
+

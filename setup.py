@@ -15,6 +15,7 @@ setup(
         (f'share/{package_name}/waypoints', glob('waypoints/*.csv')),
         (f'share/{package_name}/urdf', glob('urdf/*.xacro')),
         (f'share/{package_name}/config', glob('config/*.*')),
+        (f'share/{package_name}/worlds', glob('worlds/*.*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -40,6 +41,7 @@ setup(
             'end_effector_pose = dual_denso_arm_manipulation.end_effector_pose:main',
             'traj_to_csv = dual_denso_arm_manipulation.traj_to_csv:main',
             'collision_manager = dual_denso_arm_manipulation.collision_manager:main',
+            'ee_box_linker = dual_denso_arm_manipulation.ee_box_linker:main',
         ],
     },
 )

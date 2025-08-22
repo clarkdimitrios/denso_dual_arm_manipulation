@@ -37,6 +37,9 @@ Follow the Installation instructions [here](https://github.com/clarkdimitrios/de
 sudo apt update
 sudo apt install ros-humble-moveit ros-humble-gazebo-ros-pkgs
 pip install pymoveit2
+
+cd ~/ros2_ws/src
+git clone https://github.com/IFRA-Cranfield/IFRA_LinkAttacher.git
 ```
 
 ### 4. Build the package
@@ -144,5 +147,6 @@ Currently only supports 1-D motion along the z-axis.
 ## License & Credits
 - Original Denso ROS 2 repository: [DENSORobotics/ros2_denso_robot](https://github.com/DENSORobot/denso_robot_ros2)
 - Official Denso Robotics documentation: [Denso Robotics RC8A Controller Manual](https://www.densorobotics.com/products/controllers/rc8a-controller/)
+- IFRA-Cranfield (2023) [Gazebo-ROS2 Link Attacher](https://github.com/IFRA-Cranfield/IFRA_LinkAttacher)
 - Modifications for dual-arm planning and expansions by [Clark Abourjeily](https://github.com/clarkdimitrios).
 - License: See [LICENSE](LICENSE).

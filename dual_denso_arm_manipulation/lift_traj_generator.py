@@ -141,7 +141,7 @@ class LiftTrajGen(Node):
             self.right_ee_trajectory_pub.publish(goal_pose)
             self.get_logger().info("Published Right EE Trajectory")
 
-    def create_lift_pose(self, grab_pose: Pose, contact_depth=0.10):
+    def create_lift_pose(self, grab_pose: Pose, contact_depth=0.0):
         # Hold box
         p1 = Pose()
         p1 = self._offset_along_y(grab_pose, -self.approach_offset * (1 + contact_depth)) # revert offset + depth

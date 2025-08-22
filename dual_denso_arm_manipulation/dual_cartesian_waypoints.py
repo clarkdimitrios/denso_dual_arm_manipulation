@@ -17,6 +17,7 @@ import tf2_ros
 import transforms3d
 from geometry_msgs.msg import Pose, PoseStamped
 from sensor_msgs.msg import JointState
+from std_msgs.msg import String
 from ament_index_python.packages import get_package_share_directory
 
 from moveit_msgs.srv import GetCartesianPath
@@ -82,6 +83,12 @@ class DualArmCartesianPlanner(Node):
         # Joint state monitor (ensure robot state settles after motion)
         self._js = {}
         self.create_subscription(JointState, 'joint_states', self._js_cb, 50)
+
+        self.linker_cmd_pub = self.create_publisher(String, 'ee_linker_cmd', 10)
+        self.attach_before_segment = self.declare_parameter('attach_before_segment', 2).value
+
+        # internal flag so we only attach once
+        self._linker_attached = False
 
         self.right_offset = None 
         self._is_lift_mode = False
@@ -223,6 +230,13 @@ class DualArmCartesianPlanner(Node):
         r, pt, yw = transforms3d.euler.quat2euler(wxyz, axes='sxyz')
         return (f"XYZ=({p.position.x:.3f},{p.position.y:.3f},{p.position.z:.3f}) "
                 f"RPY(deg)=({degrees(r):.1f},{degrees(pt):.1f},{degrees(yw):.1f})")
+    
+    def _linker_cmd(self, cmd: str, sleep_sec: float = 0.1):
+        self.get_logger().info(f"[LinkerCmd] -> {cmd}")
+        self.linker_cmd_pub.publish(String(data=cmd))
+        if sleep_sec > 0:
+            time.sleep(sleep_sec)
+
 
     # ---------- Core execution ----------
     def execute_cartesian_waypoints(self, left_file, right_file):
@@ -264,6 +278,12 @@ class DualArmCartesianPlanner(Node):
                     )
                     start_i = i  # fallback IK will start from the failing row
                     break
+
+                if (i + 2) == int(self.attach_before_segment) and not self._linker_attached and n_steps > (i + 1):
+                    self.get_logger().info("[Linker] Attaching box now (before next LIFT segment)...")
+                    # publish to ee_box_linker, which calls /ATTACHLINK internally
+                    self._linker_cmd('attach', sleep_sec=0.1)
+                    self._linker_attached = True
             else:
                 # All Cartesian segments succeeded
                 self.get_logger().info("[Cartesian] All lift segments completed with Cartesian paths. Done.")

@@ -125,6 +125,8 @@ ros2 launch dual_denso_arm_manipulation lift_box.launch.py lift_height:=<+z tran
 #### Note:
 Currently only supports 1-D motion along the z-axis.
 
+![Lift Box Demo](docs/lift_box_gz.png)
+
 ---
 
 ## URDF & Planning Groups

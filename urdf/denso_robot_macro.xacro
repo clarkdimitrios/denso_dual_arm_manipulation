@@ -24,7 +24,7 @@
   >
 
     <!-- Robot data required by the denso driver -->
-    <xacro:arg name="ip_address" default="192.168.0.1"/>
+    <!-- <xacro:arg name="ip_address" default="192.168.17.1"/> -->
     <xacro:arg name="robot_name" default="VM-60B1"/> <!-- "robot_name" param must be consistent with the @TYPE_NAME variable of the real robot !! -->
     <xacro:arg name="robot_joints" default="6"/> <!-- number of total joints in the kinematic chain -->
     <xacro:arg name="joint_1" default="1"/> <!-- 0 = prismatic , 1 = revolute -->
@@ -49,7 +49,7 @@
       name="GazeboSystem" namespace="${namespace}"
       sim="${sim}"
       model="${model}"
-      ip_address="$(arg ip_address)"
+      ip_address="${ip_address}"
       robot_name="$(arg robot_name)"
       robot_joints="$(arg robot_joints)"
       joint_1="$(arg joint_1)"

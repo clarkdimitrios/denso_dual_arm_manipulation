@@ -9,6 +9,8 @@ import os
 
 def generate_launch_description():
     declared_arguments = [
+        DeclareLaunchArgument('right_ip',  default_value='192.168.17.20', description='Right RC8 IP'),
+        DeclareLaunchArgument('left_ip',  default_value='192.168.17.21', description='Left RC8 IP'),
         DeclareLaunchArgument(
             'sim',
             default_value='false',
@@ -34,6 +36,9 @@ def generate_launch_description():
             'description_file': 'dual_denso_robot.urdf.xacro',
             'moveit_config_file': 'dual_denso_robot.srdf.xacro',
             'robot_controller': 'dual_arm_joint_trajectory_controller',
+            # 'robot_controller': 'right_arm_controller left_arm_controller',
+            'right_ip_address':  LaunchConfiguration('right_ip'),
+            'left_ip_address':  LaunchConfiguration('left_ip'),
         }.items()
     )
 

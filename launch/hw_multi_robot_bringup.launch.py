@@ -4,6 +4,7 @@ from launch.actions import (
     IncludeLaunchDescription,
     DeclareLaunchArgument,
     TimerAction,
+    ExecuteProcess,
 )
 from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -11,9 +12,11 @@ from launch.conditions import IfCondition
 from ament_index_python.packages import get_package_share_directory
 import os
 
-t2 = 7.0
-t3 = t2 + 3.0
-t4 = t3 + 2.0
+# Base timing (seconds)
+t_mux_to_right = 1.0          # give joint_state_mux a moment to come up
+t2 = 3.0                      # left HW starts after right HW
+t3 = t2 + 3.0                 # dual MoveIt starts after left HW
+t_extras = 10.0               # extra delay AFTER dual MoveIt to ensure RViz is ready
 
 def generate_launch_description():
     # ---------------- Launch arguments ----------------
@@ -38,11 +41,18 @@ def generate_launch_description():
             default_value='true',
             description='Whether to spawn a box in RViz environment',
         ),
+        # Optional: override the post-RViz extras delay without editing code
+        DeclareLaunchArgument(
+            'extras_delay',
+            default_value=str(t_extras),
+            description='Seconds to wait after dual MoveIt/RViz before spawning walls/boxes',
+        ),
     ]
 
     right_ip = LaunchConfiguration('right_ip')
     left_ip = LaunchConfiguration('left_ip')
     sim = LaunchConfiguration('sim')
+    extras_delay = LaunchConfiguration('extras_delay')
 
     # ---------------- Common bringup launch ----------------
     denso_bringup_path = get_package_share_directory('denso_robot_bringup')
@@ -51,16 +61,26 @@ def generate_launch_description():
     )
 
     # ======================================================
+    # STEP 0: Start joint_state_mux (long-running process)
+    # ======================================================
+    joint_state_mux_node = Node(
+        package='dual_denso_arm_manipulation',
+        executable='joint_state_mux',
+        name='joint_state_mux',
+        output='screen',
+    )
+
+    # ======================================================
     # STEP 1: Right arm HW only (single-URDF, no MoveIt, no RViz)
     # ======================================================
-    right_hw = IncludeLaunchDescription(
+    right_hw_raw = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(denso_bringup_launch),
         launch_arguments={
             'model': 'vm60b1',
             'ip_address': right_ip,
             'description_file': 'denso_robot.urdf.xacro',
             'moveit_config_file': 'denso_robot.srdf.xacro',
-            'controllers_file': 'dual_denso_robot_controllers.yaml',
+            'controllers_file': 'right_denso_robot_controllers.yaml',
             'moveit_controllers_file': 'right_moveit_controllers.yaml',
             'robot_controller': 'right_arm_controller',
             'sim': sim,
@@ -72,9 +92,14 @@ def generate_launch_description():
         }.items(),
     )
 
+    # Delay right HW slightly so mux is alive first
+    right_hw = TimerAction(
+        period=t_mux_to_right,
+        actions=[right_hw_raw],
+    )
+
     # ======================================================
     # STEP 2: Left arm HW only (single-URDF, no MoveIt, no RViz)
-    # -> launched with a small delay after step 1
     # ======================================================
     left_hw_raw = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(denso_bringup_launch),
@@ -83,7 +108,7 @@ def generate_launch_description():
             'ip_address': left_ip,
             'description_file': 'denso_robot.urdf.xacro',
             'moveit_config_file': 'denso_robot.srdf.xacro',
-            'controllers_file': 'dual_denso_robot_controllers.yaml',
+            'controllers_file': 'left_denso_robot_controllers.yaml',
             'moveit_controllers_file': 'left_moveit_controllers.yaml',
             'robot_controller': 'left_arm_controller',
             'sim': sim,
@@ -95,21 +120,22 @@ def generate_launch_description():
         }.items(),
     )
 
-    # Timer for step 2
+    # Timer for step 2 (relative to launch start, not relative to step 1)
+    # We offset by t_mux_to_right so the spacing stays consistent.
     left_hw = TimerAction(
-        period=t2,   # seconds after launch
+        period=t_mux_to_right + t2,
         actions=[left_hw_raw],
     )
 
     # ======================================================
-    # STEP 3: Dual-URDF + MoveIt only (no HW, MoveIt+RViz only)
-    # -> launched after the two HW bringups
+    # STEP 3: Dual-URDF + MoveIt only (no HW)
+    # Matches your command exactly (launch_hw:=false)
     # ======================================================
     dual_moveit_raw = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(denso_bringup_launch),
         launch_arguments={
             'model': 'vm60b1',
-            'ip_address': '192.168.17.50',  # dummy / unused for HW=false
+            'ip_address': '192.168.17.50',  # dummy / unused since launch_hw=false
             'description_file': 'dual_denso_robot.urdf.xacro',
             'moveit_config_file': 'dual_denso_robot.srdf.xacro',
             'controllers_file': 'dual_denso_robot_controllers.yaml',
@@ -117,22 +143,20 @@ def generate_launch_description():
             'robot_controller': 'dual_arm_joint_trajectory_controller',
             'sim': sim,
             'launch_rviz': 'true',
-            'launch_moveit': 'true',
-            'launch_hw': 'false',   # IMPORTANT: do NOT start HW here
+            'launch_moveit': 'true', 
+            'launch_hw': 'false',
             'verbose': 'false',
             'namespace': '',
         }.items(),
     )
 
-    # Timer for step 3 (a bit after step 2)
     dual_moveit = TimerAction(
-        period=t3, 
+        period=t_mux_to_right + t3,
         actions=[dual_moveit_raw],
     )
 
     # ======================================================
-    # EXTRA NODES (after the 3 main steps)
-    # (small delay so MoveIt + RViz are ready)
+    # EXTRA NODES (virtual walls + box spawners)
     # ======================================================
     dual_pkg_share = get_package_share_directory('dual_denso_arm_manipulation')
 
@@ -160,47 +184,35 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('box')),
     )
 
-    # If you want the slave streamer here again, you can add it similarly:
-    # slv_stream_node = Node(
-    #     package='dual_denso_arm_manipulation',
-    #     executable='slave_streamer',
-    #     name='slave_streamer',
-    #     output='screen',
-    #     parameters=[{
-    #         'period_sec': 0.008,
-    #         'controller_trajectory_topic': '/dual_arm_joint_trajectory_controller/joint_trajectory',
-    #         'input_topic': '/slave_streamer/trajectory_in',
-    #         'change_mode_services': ['/left_vm60b1/ChangeMode','/right_vm60b1/ChangeMode'],
-    #         'joint_names': [
-    #             'left_joint_1','left_joint_2','left_joint_3',
-    #             'left_joint_4','left_joint_5','left_joint_6',
-    #             'right_joint_1','right_joint_2','right_joint_3',
-    #             'right_joint_4','right_joint_5','right_joint_6',
-    #         ],
-    #     }],
-    # )
-
-    # Small delay so it starts after MoveIt (avoid extra timers where we can)
+    # Start extras after dual MoveIt + user-controlled delay
     extras = TimerAction(
-        period=t4,
+        period=LaunchConfiguration('extras_delay'),
         actions=[
             add_virtual_walls_node,
             tf_broadcast_node,
             spawn_lift_box_node,
-            # slv_stream_node,
         ],
+    )
+
+    # NOTE: extras_delay is absolute time from launch start.
+    # We want "extras_delay after dual_moveit starts", so we offset it:
+    extras_after_dual = TimerAction(
+        period=t_mux_to_right + t3 + float(t_extras),
+        actions=[add_virtual_walls_node, tf_broadcast_node, spawn_lift_box_node],
     )
 
     return LaunchDescription(
         declared_arguments
         + [
-            # Step 1: right HW (no timer)
+            # Step 0
+            joint_state_mux_node,
+
+            # Step 1–3
             right_hw,
-            # Step 2: left HW (timer)
             left_hw,
-            # Step 3: dual MoveIt (timer)
             dual_moveit,
-            # Extra nodes after the main bringup
-            extras,
+
+            # Extras (safer: hard offset after dual_moveit)
+            extras_after_dual,
         ]
     )

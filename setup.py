@@ -42,6 +42,7 @@ setup(
             'traj_to_csv = dual_denso_arm_manipulation.traj_to_csv:main',
             'collision_manager = dual_denso_arm_manipulation.collision_manager:main',
             'ee_box_linker = dual_denso_arm_manipulation.ee_box_linker:main',
+            'joint_state_mux = dual_denso_arm_manipulation.joint_state_mux:main',
         ],
     },
 )

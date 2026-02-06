@@ -3,7 +3,7 @@
 
   <xacro:macro name="dual_denso_robot" params="
     model
-    sim:=False"
+    sim:=false"
   >
 
     <xacro:arg name="model" default="vm60b1"/>
@@ -22,7 +22,8 @@
       namespace="left_"
       ip_address="192.168.17.21"
       send_format="288"
-      recv_format="292"/>
+      recv_format="292"
+      sim="${sim}"/>
 
     <joint name="left_arm_mount" type="fixed">
       <parent link="world"/>
@@ -36,7 +37,8 @@
       namespace="right_"
       ip_address="192.168.17.20"
       send_format="288"
-      recv_format="292"/>
+      recv_format="292"
+      sim="${sim}"/>
       
     <joint name="right_arm_mount" type="fixed">
       <parent link="world"/>

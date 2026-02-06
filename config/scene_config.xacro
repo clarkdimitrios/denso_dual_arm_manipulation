@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="scene_config"> 
   <!-- Distance between the two robot bases -->
   <!-- Left arm base is at the world origin -->
-  <xacro:property name="right_arm_x" value="2.0"/>
+  <xacro:property name="right_arm_x" value="1.67"/>
 
   <!-- Pose and size of additional objects -->
   <xacro:property name="lift_box_x" value="1.0"/>

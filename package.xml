@@ -10,16 +10,24 @@
   <depend>rclpy</depend>
   <depend>pymoveit2</depend>
   <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>moveit_msgs</depend>
+  <depend>tf2_ros</depend>
   <depend>ament_index_python</depend>
+  <depend>xacro</depend>
+
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>denso_robot_core_interfaces</exec_depend>
+  <exec_depend>linkattacher_msgs</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
-  
-  <exec_depend>trajectory_msgs</exec_depend>
-  <exec_depend>std_srvs</exec_depend>
-  <exec_depend>denso_robot_core_interfaces</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>

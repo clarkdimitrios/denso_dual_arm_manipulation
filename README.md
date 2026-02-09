@@ -21,6 +21,10 @@ This work is based on the official [Denso Robotics ROS2 repository](https://gith
 
 ---
 
+## Prerequisites
+- **Ubuntu 22.04** (Jammy Jellyfish)
+- **ROS 2 Humble Hawksbill** ([installation guide](https://docs.ros.org/en/humble/Installation.html))
+
 ## Download & Installation
 
 ### 1. Clone the repository into your ROS 2 workspace
@@ -32,17 +36,26 @@ git clone https://github.com/clarkdimitrios/denso_manipulation.git
 ### 2. Clone the forked repository for Denso Robot ROS 2 packages
 Follow the Installation instructions [here](https://github.com/clarkdimitrios/denso_robot_ros2.git).
 
-### 3. Install dependencies
+### 3. Clone the Gazebo Link Attacher plugin
 ```bash
-sudo apt update
-sudo apt install ros-humble-moveit ros-humble-gazebo-ros-pkgs
-pip install pymoveit2
-
 cd ~/ros2_ws/src
 git clone https://github.com/IFRA-Cranfield/IFRA_LinkAttacher.git
 ```
 
-### 4. Build the package
+### 4. Install ROS dependencies
+```bash
+sudo apt update
+sudo apt install ros-humble-moveit ros-humble-gazebo-ros-pkgs
+cd ~/ros2_ws
+rosdep install --from-paths src --ignore-src -r -y
+```
+
+### 5. Install Python dependencies
+```bash
+pip install pymoveit2 transforms3d numpy stlpy
+```
+
+### 6. Build the workspace
 ```bash
 cd ~/ros2_ws
 colcon build
@@ -60,7 +73,7 @@ source install/setup.bash
 ### Simulation Mode
 To launch the dual-arm robot in **RViz** and **Gazebo**:
 ```bash
-ros2 launch dual_denso_arm_manipulation comb_multi_robot_bringup.launch.py sim:=true
+ros2 launch dual_denso_arm_manipulation multi_robot_bringup.launch.py sim:=true
 ```
 ![Dual Arm Demo](docs/dual_arm_rviz.png)
 
@@ -77,7 +90,7 @@ ros2 launch dual_denso_arm_manipulation comb_multi_robot_bringup.launch.py sim:=
 4. Ensure each controller has a pendantless dummy plug or a teach pendant plugged in to stay in AUTO Mode.
 5. Launch:
 ```bash
-ros2 launch dual_denso_arm_manipulation comb_multi_robot_bringup.launch.py
+ros2 launch dual_denso_arm_manipulation multi_robot_bringup.launch.py
 ```
 
 ### Virtual Walls/Objects
@@ -138,11 +151,12 @@ Currently only supports 1-D motion along the z-axis.
 ---
 
 ## Dependencies
-- ROS 2 Humble or later
+- Ubuntu 22.04 + ROS 2 Humble
 - [MoveIt2](https://moveit.ai/)
-- [pymoveit2](https://github.com/AndrejOrsula/pymoveit2)
-- Gazebo (optional for simulation)
+- [Gazebo Classic](http://gazebosim.org/) (for simulation)
+- [IFRA Link Attacher](https://github.com/IFRA-Cranfield/IFRA_LinkAttacher) (for box lifting in simulation)
 - Official [Denso ROS2 drivers](https://github.com/DENSORobot/denso_robot_ros2)
+- Python: [pymoveit2](https://github.com/AndrejOrsula/pymoveit2), transforms3d, numpy, stlpy
 
 ---
 

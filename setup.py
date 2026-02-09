@@ -17,7 +17,12 @@ setup(
         (f'share/{package_name}/config', glob('config/*.*')),
         (f'share/{package_name}/worlds', glob('worlds/*.*')),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+        'setuptools',
+        'transforms3d',
+        'numpy',
+        'stlpy',
+    ],
     zip_safe=True,
     maintainer='clark',
     maintainer_email='cabourjeily3@gatech.edu',

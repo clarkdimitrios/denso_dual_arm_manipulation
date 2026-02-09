@@ -3,6 +3,7 @@ from tf2_ros import TransformBroadcaster
 from geometry_msgs.msg import TransformStamped
 import rclpy
 import os
+import subprocess
 from ament_index_python.packages import get_package_share_directory
 import xacro
 import tempfile
@@ -56,9 +57,12 @@ class BoxSpawner(Node):
         tmpfile.close()
 
         self.get_logger().info("Spawning lift box in Gazebo")
-        os.system(f"ros2 run gazebo_ros spawn_entity.py -entity lift_box -file {tmpfile.name} "
-                  f"-x {self.pose['x']} -y {self.pose['y']} -z {self.pose['z']} "
-                  f"-R {self.pose['R']} -P {self.pose['P']} -Y {self.pose['Y']}")
+        subprocess.Popen([
+            'ros2', 'run', 'gazebo_ros', 'spawn_entity.py',
+            '-entity', 'lift_box', '-file', tmpfile.name,
+            '-x', str(self.pose['x']), '-y', str(self.pose['y']), '-z', str(self.pose['z']),
+            '-R', str(self.pose['R']), '-P', str(self.pose['P']), '-Y', str(self.pose['Y']),
+        ])
 
     def broadcast_transform(self):
         """Broadcast the transform of the box periodically."""
